@@ -1,7 +1,7 @@
 #include <SDL3/SDL.h>
 #include <SDL3/SDL_main.h>
 #include <iostream>
-
+#include "init.hpp"
 
 // entry point
 int main(int argc, char *argv[])
