@@ -1,10 +1,11 @@
+#include <libs/SDL/include/SDL3/SDL.h>
 
 
-
-// main loop
+// entry point
 int main(int argc, char *argv[])
 {
 
     return 0;
 }
+
 
