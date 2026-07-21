@@ -70,3 +70,6 @@ Testing/
 
 # vscode profiles
 .vscode/
+
+# windows run bat
+run.bat
