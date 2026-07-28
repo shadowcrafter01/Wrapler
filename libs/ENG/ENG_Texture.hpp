@@ -8,7 +8,7 @@ class ENG_Texture
 {
 private:
 public:
-    ENG_Texture(const char* path, ENG_Window* window) : path{path}
+    ENG_Texture(const char *path, ENG_Window *window) : path{path}
     {
         surface = SDL_LoadBMP(path);
         width = surface->w;
@@ -17,9 +17,9 @@ public:
     }
     int width;
     int height;
-    const char* path;
-    SDL_Texture* pointer;
-    SDL_Surface* surface;
+    const char *path;
+    SDL_Texture *pointer;
+    SDL_Surface *surface;
 };
 
 #endif

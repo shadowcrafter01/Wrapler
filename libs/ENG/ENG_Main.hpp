@@ -14,6 +14,7 @@
 #include "ENG_Window.hpp"
 #include "ENG_Texture.hpp"
 
+
 class ENG_Main
 {
 private:
@@ -38,8 +39,26 @@ public:
             return false;
         }
 
+        if (!MIX_Init())
+        {
+            SDL_Log("Couldn't init SDL_mixer library: %s", SDL_GetError());
+            return false;
+        }
+
+        mixer = MIX_CreateMixerDevice(SDL_AUDIO_DEVICE_DEFAULT_PLAYBACK, NULL);
+        if (!mixer)
+        {
+            SDL_Log("Couldn't create mixer on default device: %s", SDL_GetError());
+            return false;
+        }
+
         return true;
     }
+
+    MIX_Mixer *mixer;
 };
+extern ENG_Main engine;
+
+#include "ENG_Audio.hpp"
 
 #endif
