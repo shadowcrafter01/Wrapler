@@ -1,9 +1,14 @@
 #define SDL_MAIN_USE_CALLBACKS 1
 
 #include "init.hpp"
+#include <SDL3/SDL_main.h>
 
 #define WINDOW_WIDTH 640
 #define WINDOW_HEIGHT 480
+
+
+
+
 
 
 SDL_AppResult SDL_AppInit(void **appstate, int argc, char *argv[])
@@ -21,26 +26,30 @@ SDL_AppResult SDL_AppInit(void **appstate, int argc, char *argv[])
         return SDL_APP_FAILURE;
     }
 
+    //SDL_SetHint(SDL_HINT_MOUSE_FOCUS_CLICKTHROUGH, "1");
+
     // make window
     //| SDL_WINDOW_TRANSPARENT | SDL_WINDOW_BORDERLESS | SDL_WINDOW_ALWAYS_ON_TOP
-    if (!SDL_CreateWindowAndRenderer("le wrapler rawr", 640, 480, SDL_WINDOW_RESIZABLE, &window, &renderer))
-    {
-        return SDL_APP_FAILURE;
-    }
-    SDL_SetRenderLogicalPresentation(renderer, 640, 480, SDL_LOGICAL_PRESENTATION_LETTERBOX);
+    //if (!SDL_CreateWindowAndRenderer("le wrapler rawr", 640, 480, SDL_WINDOW_RESIZABLE, &window, &renderer))
+    //{
+    //    return SDL_APP_FAILURE;
+    //}
+    //SDL_SetRenderLogicalPresentation(renderer, 640, 480, SDL_LOGICAL_PRESENTATION_LETTERBOX);
     // SDL_SetWindowOpacity(window,0.5f);
+
+
 
     // load texture
     SDL_Surface *surface = SDL_LoadBMP("data/textures/billGates.bmp");
     texture_width = surface->w;
     texture_height = surface->h;
-    texture = SDL_CreateTextureFromSurface(renderer, surface);
+    texture = SDL_CreateTextureFromSurface(WIN.prime.renderer.pointer, surface);
 
     // set window icon
-    if (!SDL_SetWindowIcon(window, surface))
-    {
-        SDL_Log("texture no exist: %s", SDL_GetError());
-    }
+    //if (!SDL_SetWindowIcon(window.renderer->pointer, surface))
+    //{
+    //    SDL_Log("texture no exist: %s", SDL_GetError());
+    //}
 
     // init audio system
     if (!MIX_Init())
@@ -75,7 +84,7 @@ SDL_AppResult SDL_AppInit(void **appstate, int argc, char *argv[])
         SDL_Log("Couldn't open font: %s\n", SDL_GetError());
         return SDL_APP_FAILURE;
     }
-    engine = TTF_CreateRendererTextEngine(renderer);
+    engine = TTF_CreateRendererTextEngine(WIN.prime.renderer.pointer);
     if (!engine)
     {
         SDL_Log("Couldn't create text engine: %s\n", SDL_GetError());
@@ -95,10 +104,10 @@ SDL_AppResult SDL_AppInit(void **appstate, int argc, char *argv[])
 
     //SDL_SetWindowShape(window, surface);
     //SDL_PropertiesID props = SDL_GetWindowProperties(window);
-    //HWND hwnd = (HWND)SDL_GetPointerProperty(props,SDL_PROP_WINDOW_WIN32_HWND_POINTER,nullptr);
+    //HWND hwnd = (HWND)SDL_GetPointerProperty(props, SDL_PROP_WINDOW_WIN32_HWND_POINTER, nullptr);
     //LONG exStyle = GetWindowLong(hwnd, GWL_EXSTYLE);
-    //SetWindowLong(hwnd,GWL_EXSTYLE,exStyle | WS_EX_LAYERED | WS_EX_TRANSPARENT);
-    //SetWindowPos(hwnd,nullptr,0, 0, 0, 0,SWP_NOMOVE |SWP_NOSIZE |SWP_NOZORDER |SWP_FRAMECHANGED);
+    //SetWindowLong(hwnd, GWL_EXSTYLE, exStyle | WS_EX_LAYERED | WS_EX_TRANSPARENT);
+    //SetWindowPos(hwnd, nullptr, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_NOZORDER | SWP_FRAMECHANGED);
 
     return SDL_APP_CONTINUE;
 }
@@ -132,8 +141,8 @@ SDL_AppResult SDL_AppEvent(void *appstate, SDL_Event *event)
 SDL_AppResult SDL_AppIterate(void *appstate)
 {
     // main render loop (runs as fast as possible)
-    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
-    SDL_RenderClear(renderer);
+    SDL_SetRenderDrawColor(WIN.prime.renderer.pointer, 0, 0, 0, 0);
+    SDL_RenderClear(WIN.prime.renderer.pointer);
 
     SDL_GetMouseState(&mouseX, &mouseY);
 
@@ -142,7 +151,7 @@ SDL_AppResult SDL_AppIterate(void *appstate)
     rect.y = mouseY;
     rect.h = texture_height;
     rect.w = texture_width;
-    SDL_RenderTexture(renderer, texture, NULL, &rect);
+    SDL_RenderTexture(WIN.prime.renderer.pointer, texture, NULL, &rect);
 
     /* Draw a single triangle with a different color at each vertex. Center this one and make it grow and shrink. */
     /* You always draw triangles with this, but you can string triangles together to form polygons. */
@@ -161,7 +170,7 @@ SDL_AppResult SDL_AppIterate(void *appstate)
     vertices[2].position.y = (((float)WINDOW_HEIGHT) + size) / 2.0f;
     vertices[2].color.b = 1.0f;
     vertices[2].color.a = 1.0f;
-    SDL_RenderGeometry(renderer, NULL, vertices, 3, NULL, 0);
+    SDL_RenderGeometry(WIN.prime.renderer.pointer, NULL, vertices, 3, NULL, 0);
 
     int w = 0, h = 0;
     int text_w = 0, text_h = 0;
@@ -178,7 +187,7 @@ SDL_AppResult SDL_AppIterate(void *appstate)
         last_check = now;
         frames = 0;
     }
-    SDL_GetRenderOutputSize(renderer, &w, &h);
+    SDL_GetRenderOutputSize(WIN.prime.renderer.pointer, &w, &h);
     TTF_GetTextSize(text, &text_w, &text_h);
     x = (float)(w - text_w) / 2;
     y = (float)(h - text_h) / 2;
@@ -187,12 +196,12 @@ SDL_AppResult SDL_AppIterate(void *appstate)
     // SDL_Delay(16);
     ++frames;
 
-    SDL_RenderPresent(renderer);
+    SDL_RenderPresent(WIN.prime.renderer.pointer);
     return SDL_APP_CONTINUE;
 }
 
 void SDL_AppQuit(void *appstate, SDL_AppResult result)
 {
-    SDL_DestroyTexture(texture);
+    //SDL_DestroyTexture(texture);
     // end things
 }

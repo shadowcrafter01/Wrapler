@@ -1,16 +1,21 @@
-#ifndef INIT_H
+#ifndef INIT_HPP
+#define INIT_HPP
 
-#include <SDL3/SDL.h>
-#include <SDL3/SDL_main.h>
-#include <SDL3_mixer/SDL_mixer.h>
-#include <SDL3_ttf/SDL_ttf.h>
+#include "ENG_Main.hpp"
 
-#include <Windows.h>
+//static SDL_Window *window = NULL;
+struct ENG_Windows
+{
+    ENG_Windows():
+    prime("le wrapler rawr", Vector2(640,480), SDL_WINDOW_RESIZABLE)//,vector2D(1920,1080)),
 
-#include <iostream>
+    {}
+    ENG_Window prime;
+};
+extern ENG_Windows WIN;
 
-static SDL_Window *window = NULL;
-static SDL_Renderer *renderer = NULL;
+
+//static SDL_Renderer *renderer = NULL;
 static SDL_Texture *texture = NULL;
 static int texture_width = 0;
 static int texture_height = 0;
