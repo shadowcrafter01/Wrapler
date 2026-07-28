@@ -1,43 +1,23 @@
 #define SDL_MAIN_USE_CALLBACKS 1
 
 #include "init.hpp"
-#include <SDL3/SDL_main.h>
+#include <SDL3/SDL_main.h> //i think this has to go in main.cpp very specifically for sdl3 to know where to start
 
-#define WINDOW_WIDTH 640
-#define WINDOW_HEIGHT 480
+#include "Timer.hpp"
 
+// #define WINDOW_WIDTH 640
+// #define WINDOW_HEIGHT 480
 
-
-
-
+ENG_Main engine;
+Timer ENG_Timer;
 
 SDL_AppResult SDL_AppInit(void **appstate, int argc, char *argv[])
 {
-    // metadata
-    if (!SDL_SetAppMetadata("Wrapler", "0.0", "com.wrapler.engine"))
+
+    if (!engine.Init())
     {
         return SDL_APP_FAILURE;
     }
-
-    // init sdl
-    if (!SDL_Init(SDL_INIT_VIDEO))
-    {
-        SDL_Log("SDL init error: %s", SDL_GetError());
-        return SDL_APP_FAILURE;
-    }
-
-    //SDL_SetHint(SDL_HINT_MOUSE_FOCUS_CLICKTHROUGH, "1");
-
-    // make window
-    //| SDL_WINDOW_TRANSPARENT | SDL_WINDOW_BORDERLESS | SDL_WINDOW_ALWAYS_ON_TOP
-    //if (!SDL_CreateWindowAndRenderer("le wrapler rawr", 640, 480, SDL_WINDOW_RESIZABLE, &window, &renderer))
-    //{
-    //    return SDL_APP_FAILURE;
-    //}
-    //SDL_SetRenderLogicalPresentation(renderer, 640, 480, SDL_LOGICAL_PRESENTATION_LETTERBOX);
-    // SDL_SetWindowOpacity(window,0.5f);
-
-
 
     // load texture
     SDL_Surface *surface = SDL_LoadBMP("data/textures/billGates.bmp");
@@ -46,10 +26,11 @@ SDL_AppResult SDL_AppInit(void **appstate, int argc, char *argv[])
     texture = SDL_CreateTextureFromSurface(WIN.prime.renderer.pointer, surface);
 
     // set window icon
-    //if (!SDL_SetWindowIcon(window.renderer->pointer, surface))
+    WIN.prime.SetIcon("data/textures/billGates.bmp");
+    // if (!SDL_SetWindowIcon(window.renderer->pointer, surface))
     //{
-    //    SDL_Log("texture no exist: %s", SDL_GetError());
-    //}
+    //     SDL_Log("texture no exist: %s", SDL_GetError());
+    // }
 
     // init audio system
     if (!MIX_Init())
@@ -84,13 +65,13 @@ SDL_AppResult SDL_AppInit(void **appstate, int argc, char *argv[])
         SDL_Log("Couldn't open font: %s\n", SDL_GetError());
         return SDL_APP_FAILURE;
     }
-    engine = TTF_CreateRendererTextEngine(WIN.prime.renderer.pointer);
-    if (!engine)
+    ttfengine = TTF_CreateRendererTextEngine(WIN.prime.renderer.pointer);
+    if (!ttfengine)
     {
         SDL_Log("Couldn't create text engine: %s\n", SDL_GetError());
         return SDL_APP_FAILURE;
     }
-    text = TTF_CreateText(engine, font, "Calculating...", 0);
+    text = TTF_CreateText(ttfengine, font, "Calculating...", 0);
     if (!text)
     {
         SDL_Log("Couldn't create text: %s\n", SDL_GetError());
@@ -102,12 +83,12 @@ SDL_AppResult SDL_AppInit(void **appstate, int argc, char *argv[])
     // what
     SDL_Log("what");
 
-    //SDL_SetWindowShape(window, surface);
-    //SDL_PropertiesID props = SDL_GetWindowProperties(window);
-    //HWND hwnd = (HWND)SDL_GetPointerProperty(props, SDL_PROP_WINDOW_WIN32_HWND_POINTER, nullptr);
-    //LONG exStyle = GetWindowLong(hwnd, GWL_EXSTYLE);
-    //SetWindowLong(hwnd, GWL_EXSTYLE, exStyle | WS_EX_LAYERED | WS_EX_TRANSPARENT);
-    //SetWindowPos(hwnd, nullptr, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_NOZORDER | SWP_FRAMECHANGED);
+    // SDL_SetWindowShape(window, surface);
+    // SDL_PropertiesID props = SDL_GetWindowProperties(window);
+    // HWND hwnd = (HWND)SDL_GetPointerProperty(props, SDL_PROP_WINDOW_WIN32_HWND_POINTER, nullptr);
+    // LONG exStyle = GetWindowLong(hwnd, GWL_EXSTYLE);
+    // SetWindowLong(hwnd, GWL_EXSTYLE, exStyle | WS_EX_LAYERED | WS_EX_TRANSPARENT);
+    // SetWindowPos(hwnd, nullptr, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_NOZORDER | SWP_FRAMECHANGED);
 
     return SDL_APP_CONTINUE;
 }
@@ -143,6 +124,9 @@ SDL_AppResult SDL_AppIterate(void *appstate)
     // main render loop (runs as fast as possible)
     SDL_SetRenderDrawColor(WIN.prime.renderer.pointer, 0, 0, 0, 0);
     SDL_RenderClear(WIN.prime.renderer.pointer);
+    WIN.prime.Update();
+
+    ENG_Timer.update();
 
     SDL_GetMouseState(&mouseX, &mouseY);
 
@@ -162,12 +146,12 @@ SDL_AppResult SDL_AppIterate(void *appstate)
     vertices[0].position.y = mouseY; //(((float) WINDOW_HEIGHT) - size) / 2.0f;
     vertices[0].color.r = 1.0f;
     vertices[0].color.a = 1.0f;
-    vertices[1].position.x = (((float)WINDOW_WIDTH) + size) / 2.0f;
-    vertices[1].position.y = (((float)WINDOW_HEIGHT) + size) / 2.0f;
+    vertices[1].position.x = ((WIN.prime.size.x) + size) / 2.0f;
+    vertices[1].position.y = ((WIN.prime.size.y) + size) / 2.0f;
     vertices[1].color.g = 1.0f;
     vertices[1].color.a = 1.0f;
-    vertices[2].position.x = (((float)WINDOW_WIDTH) - size) / 2.0f;
-    vertices[2].position.y = (((float)WINDOW_HEIGHT) + size) / 2.0f;
+    vertices[2].position.x = ((WIN.prime.size.x) - size) / 2.0f;
+    vertices[2].position.y = ((WIN.prime.size.y) + size) / 2.0f;
     vertices[2].color.b = 1.0f;
     vertices[2].color.a = 1.0f;
     SDL_RenderGeometry(WIN.prime.renderer.pointer, NULL, vertices, 3, NULL, 0);
@@ -179,13 +163,13 @@ SDL_AppResult SDL_AppIterate(void *appstate)
     if ((now - last_check) >= 100)
     {
         char string[6];
-        float fps = frames * 1000.0f / (now - last_check);
-        SDL_snprintf(string, sizeof(string), "%.2f", fps);
+        // float fps = frames * 1000.0f / (now - last_check);
+        SDL_snprintf(string, sizeof(string), "%.2f", ENG_Timer.FPS); // fps);
         TTF_SetTextString(text, string, 0);
 
         /* Reset our counters for the next cycle */
         last_check = now;
-        frames = 0;
+        // frames = 0;
     }
     SDL_GetRenderOutputSize(WIN.prime.renderer.pointer, &w, &h);
     TTF_GetTextSize(text, &text_w, &text_h);
@@ -194,7 +178,7 @@ SDL_AppResult SDL_AppIterate(void *appstate)
     TTF_DrawRendererText(text, x, y);
 
     // SDL_Delay(16);
-    ++frames;
+    //++frames;
 
     SDL_RenderPresent(WIN.prime.renderer.pointer);
     return SDL_APP_CONTINUE;
@@ -202,6 +186,6 @@ SDL_AppResult SDL_AppIterate(void *appstate)
 
 void SDL_AppQuit(void *appstate, SDL_AppResult result)
 {
-    //SDL_DestroyTexture(texture);
-    // end things
+    // SDL_DestroyTexture(texture);
+    //  end things
 }

@@ -11,7 +11,7 @@ private:
     {
         SDL_Renderer *pointer;
     };
-    
+
 public:
     ENG_Window(const char *title, Vector2<int> size, SDL_WindowFlags flags) : title{title},
                                                                               size{size},
@@ -39,6 +39,10 @@ public:
         {
             SDL_Log("texture no exist: %s", SDL_GetError());
         }
+    }
+    void Update()
+    {
+        SDL_GetWindowSizeInPixels(pointer, &size.x, &size.y);
     }
 };
 
