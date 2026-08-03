@@ -31,21 +31,7 @@ void mainTick()
     vertices[2].color.a = 1.0f;
     SDL_RenderGeometry(WIN.prime.renderer.pointer, NULL, vertices, 3, NULL, 0);
 
-    int w = 0, h = 0;
-    int text_w = 0, text_h = 0;
-    float x, y;
-    Uint64 now = SDL_GetTicks();
-    if ((now - last_check) >= 100)
-    {
-        char string[6];
-        SDL_snprintf(string, sizeof(string), "%.2f", ENG_Timer.FPS);
-        TTF_SetTextString(text, string, 0);
 
-        last_check = now;
-    }
-    SDL_GetRenderOutputSize(WIN.prime.renderer.pointer, &w, &h);
-    TTF_GetTextSize(text, &text_w, &text_h);
-    x = (float)(w - text_w) / 2;
-    y = (float)(h - text_h) / 2;
-    TTF_DrawRendererText(text, x, y);
+
+    
 }

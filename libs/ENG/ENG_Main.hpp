@@ -4,27 +4,28 @@
 #include <SDL3/SDL.h>
 // #include <SDL3/SDL_main.h>
 #include <SDL3_image/SDL_image.h>
-#include <SDL3_mixer/SDL_mixer.h>
-#include <SDL3_ttf/SDL_ttf.h>
 
 #include <iostream>
+#include <functional>
 
 #include "Vector2.hpp"
 
+#include "ENG_Console.hpp"
 #include "ENG_Window.hpp"
 #include "ENG_Texture.hpp"
-
+#include "ENG_Font.hpp"
+#include "ENG_Timer.hpp"
+#include "ENG_Audio.hpp"
 
 class ENG_Main
 {
 private:
-    /* data */
 public:
     ENG_Main(/* args */)
     {
     }
 
-    bool Init()
+    inline static bool Init()
     {
         // metadata
         if (!SDL_SetAppMetadata("Wrapler", "0.0", "com.wrapler.engine"))
@@ -39,26 +40,61 @@ public:
             return false;
         }
 
-        if (!MIX_Init())
-        {
-            SDL_Log("Couldn't init SDL_mixer library: %s", SDL_GetError());
-            return false;
-        }
-
-        mixer = MIX_CreateMixerDevice(SDL_AUDIO_DEVICE_DEFAULT_PLAYBACK, NULL);
-        if (!mixer)
-        {
-            SDL_Log("Couldn't create mixer on default device: %s", SDL_GetError());
-            return false;
-        }
-
+        GAMESTATE = true;
         return true;
     }
 
-    MIX_Mixer *mixer;
-};
-extern ENG_Main engine;
+    inline static void Event()
+    {
+        SDL_Event ENG_Event;
+        while (SDL_PollEvent(&ENG_Event))
+        {
+            switch (ENG_Event.type)
+            {
+            case SDL_EVENT_QUIT:
+                GAMESTATE = false;
+                break;
+            case SDL_EVENT_WINDOW_CLOSE_REQUESTED:
+                GAMESTATE = false;
+                break;
+            case SDL_EVENT_KEY_DOWN:
+                // keyboard down stuff here
+                break;
+            case SDL_EVENT_KEY_UP:
+                // keyboard up stuff here
+                break;
+            case SDL_EVENT_MOUSE_BUTTON_DOWN:
+                // mouse down stuff here
+                // MIX_PlayAudio(mixer, audio);
+                // AUD.boom.Play();
 
-#include "ENG_Audio.hpp"
+                break;
+            case SDL_EVENT_MOUSE_BUTTON_UP:
+                // mouse up stuff here
+                break;
+            default:
+                break;
+            }
+        }
+    }
+
+    inline static bool Update()
+    {
+        Event();
+        ENG_Window::UpdateAll();
+        ENG_timer.update();
+
+        return GAMESTATE;
+    }
+
+    inline static void Shutdown()
+    {
+        SDL_Quit();
+    }
+
+    inline static bool GAMESTATE = false;
+
+};
+// static ENG_Main engine;
 
 #endif

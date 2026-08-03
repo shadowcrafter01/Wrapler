@@ -9,85 +9,26 @@
 #include <iomanip>
 #include <stdexcept>
 
-/*
-class Timer//scratch esque timer and fps handling
-{
-private:
-    bool active;
-    double timeLast;
-    double timeStart;
 
-    std::thread trackTime;
-    void trackMS()
-    {
-        while (active)
-        {
-            nanoseconds=std::chrono::system_clock::now().time_since_epoch().count()-timeStart;
-            milliseconds=nanoseconds/1000000;
-            seconds=nanoseconds/1000000000;
-        }
-    }
-
-
-public:
-    Timer(double TPS=20):
-    targetTPS{TPS},timeStart{timeStart=std::chrono::system_clock::now().time_since_epoch().count()}
-    {
-        active=true;
-        trackTime=std::thread(&Timer::trackMS,this);
-    }
-    ~Timer()
-    {
-        active=false;
-        trackTime.join();
-    }
-
-    double targetTPS;
-    double seconds;
-    double milliseconds;
-    double nanoseconds;
-    double fps;
-    double delta;
-    double physDelta;
-
-    void update()
-    {
-        //nanoseconds=std::chrono::system_clock::now().time_since_epoch().count()-timeStart;
-        //milliseconds=nanoseconds/1000000;
-        //seconds=nanoseconds/1000000000;
-        fps=1/(seconds-timeLast);
-        delta=(seconds-timeLast)*targetTPS;
-        physDelta=(delta>1)? 1:delta;
-        timeLast=seconds;
-    }
-
-    //void stop()
-    //{
-        //active=false;
-        //trackTime.join();
-    //}
-};
-*/
-
-class Timer
+class ENG_Timer
 {
 public:
-    Timer(double target_fps = 1000) : _running(true),
-                                      _currentNs(0),
-                                      targetFPS(target_fps),
-                                      FPS(0)
+    ENG_Timer(double target_fps = 1000) : _running(true),
+                                          _currentNs(0),
+                                          targetFPS(target_fps),
+                                          FPS(0)
     {
-        _thread = std::thread(&Timer::run, this);
+        _thread = std::thread(&ENG_Timer::run, this);
     }
 
-    ~Timer()
+    ~ENG_Timer()
     {
         stop();
     }
 
     // Non-copyable, non-movable
-    Timer(const Timer &) = delete;
-    Timer &operator=(const Timer &) = delete;
+    ENG_Timer(const ENG_Timer &) = delete;
+    ENG_Timer &operator=(const ENG_Timer &) = delete;
 
     // Returns the latest captured nanosecond count since epoch of steady_clock
     double now_ns() const noexcept
@@ -160,6 +101,6 @@ private:
     std::thread _thread;
 };
 
-extern Timer ENG_timer;
+static ENG_Timer ENG_timer;
 
 #endif
