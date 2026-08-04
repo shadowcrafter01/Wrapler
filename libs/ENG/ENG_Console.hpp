@@ -11,7 +11,7 @@ class ENG_Console
 private:
     static std::string reportCurrentMS()
     {
-        std::string time = std::to_string(std::round(ENG_timer.now_ms() * 100) / 100);
+        std::string time = std::to_string(std::round(timer->now_ms() * 100) / 100);
         std::string buffer = "";
         int decimal = 0;
         for (char i : time)
@@ -31,7 +31,14 @@ private:
         return "[" + buffer + "]";
     }
 
+    inline static ENG_Timer* timer;
+
 public:
+    ENG_Console(ENG_Timer* timer_in)
+    {
+        timer = timer_in;
+    }
+
     static void Log(std::string message, std::string label = "")
     {
         std::cout << label << message << "\n";
@@ -52,6 +59,6 @@ public:
         std::cout << reportCurrentMS() << " -ERROR: " << message << " -> " << SDL_GetError();
     }
 };
-static ENG_Console console;
+//static ENG_Console console;
 
 #endif

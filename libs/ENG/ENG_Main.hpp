@@ -16,12 +16,13 @@
 #include "ENG_Font.hpp"
 #include "ENG_Timer.hpp"
 #include "ENG_Audio.hpp"
+#include "ENG_Input.hpp"
 
-class ENG_Main
+class ENG
 {
 private:
 public:
-    ENG_Main(/* args */)
+    ENG(/* args */)
     {
     }
 
@@ -59,18 +60,19 @@ public:
                 break;
             case SDL_EVENT_KEY_DOWN:
                 // keyboard down stuff here
+
                 break;
             case SDL_EVENT_KEY_UP:
                 // keyboard up stuff here
+
                 break;
             case SDL_EVENT_MOUSE_BUTTON_DOWN:
                 // mouse down stuff here
-                // MIX_PlayAudio(mixer, audio);
-                // AUD.boom.Play();
-
+                //ENG_Input::mouse.buttonDown(&ENG_Event);
                 break;
             case SDL_EVENT_MOUSE_BUTTON_UP:
                 // mouse up stuff here
+                //ENG_Input::mouse.buttonUp(&ENG_Event);
                 break;
             default:
                 break;
@@ -82,7 +84,8 @@ public:
     {
         Event();
         ENG_Window::UpdateAll();
-        ENG_timer.update();
+        timer.update();
+        ENG_Input::Update();
 
         return GAMESTATE;
     }
@@ -93,8 +96,27 @@ public:
     }
 
     inline static bool GAMESTATE = false;
+    inline static ENG_Timer timer;
+    inline static ENG_Console console = ENG_Console(&timer);
+    //inline static ENG_Input input;
 
+    inline static ENG_Window CreateWindow(const char *title, Vector2<int> size, SDL_WindowFlags flags)
+    {
+        return ENG_Window(title, size, flags);
+    }
+    inline static ENG_Texture CreateTexture(const char *path, ENG_Window* window)
+    {
+        return ENG_Texture(path, window);
+    }
+    inline static ENG_Font CreateFont(const char *path, int point)
+    {
+        return ENG_Font(path, point);
+    }
+    inline static ENG_Audio CreateAudio(const char *path)
+    {
+        return ENG_Audio(path);
+    }
 };
-// static ENG_Main engine;
+
 
 #endif
