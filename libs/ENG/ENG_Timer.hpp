@@ -101,6 +101,4 @@ private:
     std::thread _thread;
 };
 
-static ENG_Timer ENG_timer;
-
 #endif
