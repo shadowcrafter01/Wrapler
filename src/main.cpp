@@ -21,7 +21,7 @@ int main(int argc, char *argv[])
     TTF_Text *testtext = FNT::sonic2.MakeText("test", &WIN::primary);
     TTF_Text *cutest = FNT::cu.MakeText("let's not give up just yet", &WIN::primary);
 
-    ENG::input.RegisterMouseDown_R(onMouseClick);
+    ENG::input.RegisterMouseUp_R(onMouseClick);
     ENG::input.RegisterMouseDown_L(onMouseClick2);
     ENG::input.RegisterMouseDown_R(onMouseClick3);
 
@@ -37,6 +37,11 @@ int main(int argc, char *argv[])
         mainTick();
         TTF_DrawRendererText(testtext, 0, 0);
         TTF_DrawRendererText(cutest, 0, 20);
+
+        if (ENG::input.GetMouseState(SDL_BUTTON_LEFT))
+        {
+            ENG::console.LogInfo("ooga booga");
+        }
 
         // TTF_DrawRendererText(FNT::cu.MakeText(std::to_string(ENG::timer.FPS),&WIN::primary),ENG::input.getMousePos().x,ENG::input.getMousePos().y);
     }

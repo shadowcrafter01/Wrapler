@@ -17,8 +17,6 @@ private:
 
     // mouse state
     inline static std::unordered_set<Uint8> _mouseButtons;
-    inline static std::unordered_set<Uint8> _mousePressed;
-    inline static std::unordered_set<Uint8> _mouseReleased;
 
     inline static float _mouseX = 0.0f;
     inline static float _mouseY = 0.0f;
@@ -62,7 +60,6 @@ public:
             break;
         case SDL_EVENT_MOUSE_BUTTON_DOWN:
             _mouseButtons.insert(event.button.button);
-            _mousePressed.insert(event.button.button);
 
             switch (event.button.button)
             {
@@ -92,7 +89,6 @@ public:
             break;
         case SDL_EVENT_MOUSE_BUTTON_UP:
             _mouseButtons.erase(event.button.button);
-            _mouseReleased.insert(event.button.button);
 
             switch (event.button.button)
             {
@@ -157,9 +153,9 @@ public:
     }
 
     // raw mouse state (for getting inputs from random buttons besides R L or M)
-    static bool GetMouseInput(Uint8 button)
+    static bool GetMouseState(Uint8 button)
     {
-        return _mousePressed.count(button) != 0;
+        return _mouseButtons.count(button) != 0;
     }
 
     // keyboard stuf
