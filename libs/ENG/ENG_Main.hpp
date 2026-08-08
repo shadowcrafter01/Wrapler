@@ -18,6 +18,7 @@
 #include "ENG_Audio.hpp"
 #include "ENG_Input.hpp"
 #include "ENG_Camera.hpp"
+#include "ENG_File.hpp"
 
 class ENG
 {

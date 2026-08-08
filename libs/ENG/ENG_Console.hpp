@@ -44,19 +44,24 @@ public:
         std::cout << label << message << "\n";
     }
 
-    static void LogInfo(std::string message)
+    static void LogInfo(std::string message, std::string label_override = " -INFO : ")
     {
-        std::cout << reportCurrentMS() << " -INFO : " << message << "\n";
+        std::cout << reportCurrentMS() << label_override << message << "\n";
     }
 
-    static void LogDebug(double message)
+    static void LogDebug(double message, std::string label_override = " -DEBUG: ")
     {
-        std::cout << reportCurrentMS() << " -DEBUG: " << message << "\n";
+        std::cout << reportCurrentMS() << label_override << message << "\n";
     }
 
-    static void LogError(std::string message = "")
+    static void LogWarn(std::string message)
     {
-        std::cout << reportCurrentMS() << " -ERROR: " << message << " -> " << SDL_GetError();
+        std::cout << reportCurrentMS() << " -WARN : " << message << "\n";
+    }
+
+    static void LogError(std::string message, std::string error = SDL_GetError())
+    {
+        std::cout << reportCurrentMS() << " -ERROR: " << message << " -> " << error << "\n";
     }
 };
 //static ENG_Console console;
