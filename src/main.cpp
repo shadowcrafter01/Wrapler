@@ -4,19 +4,22 @@
 #include "game.hpp"
 
 
+
+void onMouseClick();
+
 int main(int argc, char *argv[])
 {
     ENG::Init();
 
-    WIN.prime.SetIcon("data/textures/billGates.bmp");
+    WIN::primary.SetIcon("data/textures/billGates.bmp");
 
     ENG::console.LogInfo("test");
     ENG::console.LogDebug(ENG::timer.now_ns());
 
-    AUD.boom.Play();
+    TTF_Text *testtext = FNT::sonic2.MakeText("test",&WIN::primary);
+    TTF_Text *cutest = FNT::cu.MakeText("let's not give up just yet",&WIN::primary);
 
-    TTF_Text *testtext = FNT.sonic2.MakeText("test",&WIN.prime);
-    TTF_Text *cutest = FNT.cu.MakeText("let's not give up just yet",&WIN.prime);
+    ENG::input.RegisterMouseDown_R(onMouseClick);
 
     while (ENG::Update())
     {
@@ -25,12 +28,16 @@ int main(int argc, char *argv[])
         TTF_DrawRendererText(testtext,0,0);
         TTF_DrawRendererText(cutest,0,20);
 
-        //if (ENG_Input::mouse.holdL)//ENG::input.mouse.holdL)
-        //{
-        //    AUD.boom.Play();
-        //}
+        //TTF_DrawRendererText(FNT::cu.MakeText(std::to_string(ENG::timer.FPS),&WIN::primary),ENG::input.getMousePos().x,ENG::input.getMousePos().y);
 
     }
     ENG::Shutdown();
     return 0;
 }
+
+void onMouseClick()
+{
+    //AUD.boom.Play();
+    AUD::boom.Play();
+}
+

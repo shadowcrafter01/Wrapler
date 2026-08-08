@@ -3,35 +3,34 @@
 
 #include "ENG_Main.hpp"
 
-// static SDL_Window *window = NULL;
-struct ENG_Windows
+struct WIN
 {
-    ENG_Window prime = ENG::CreateWindow("le wrapler rawr", Vector2(640, 480), SDL_WINDOW_RESIZABLE);
+    inline static ENG_Window primary = ENG::CreateWindow("le wrapler rawr", Vector2(640, 480), SDL_WINDOW_RESIZABLE);
 };
-extern ENG_Windows WIN;
 
-struct ENG_Fonts
+struct FNT
 {
-    ENG_Font sonic2 = ENG::CreateFont("data/fonts/sonic-hud-c-italic.ttf", 12);
-    ENG_Font cu = ENG::CreateFont("data/fonts/Retro.Gaming.Extended.ttf", 24);
+    inline static ENG_Font sonic2 = ENG::CreateFont("data/fonts/sonic-hud-c-italic.ttf", 12);
+    inline static ENG_Font cu = ENG::CreateFont("data/fonts/Retro.Gaming.Extended.ttf", 24);
 };
-extern ENG_Fonts FNT;
 
-struct ENG_Textures
+struct TEX
 {
-    ENG_Texture billGates = ENG::CreateTexture("data/textures/billGates.bmp", &WIN.prime);
+    inline static ENG_Texture billGates = ENG::CreateTexture("data/textures/billGates.bmp", &WIN::primary);
 };
-extern ENG_Textures TEX;
 
-struct ENG_Sounds
+struct CAM
 {
-    ENG_Audio boom = ENG::CreateAudio("data/sounds/vine-boom.mp3");
+    inline static ENG_Camera primary = ENG::CreateCamera(&WIN::primary);
 };
-extern ENG_Sounds AUD;
 
-static float mouseX;
-static float mouseY;
-static Uint64 last_check;
+
+struct AUD
+{
+    inline static ENG_Audio boom = ENG::CreateAudio("data/sounds/vine-boom.mp3");
+    inline static ENG_Audio boom2 = ENG::CreateAudio("data/sounds/vine-boom.mp3");
+};
+
 
 #include "ENG_Timer.hpp"
 
