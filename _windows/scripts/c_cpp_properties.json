@@ -10,7 +10,9 @@
                 "${workspaceFolder}/libs/SDL_mixer/include",
                 "${workspaceFolder}/libs/SDL_ttf/include",
                 "${workspaceFolder}/include",
-                "${workspaceFolder}/libs/ENG"
+                "${workspaceFolder}/libs/ENG",
+                "${workspaceFolder}/libs/json/include",
+                "${workspaceFolder}/libs/json/include/nlohmann"
             ],
             "defines": [
                 "_DEBUG",

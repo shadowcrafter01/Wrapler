@@ -14,7 +14,7 @@
                 "-o", "out.exe",
 
                 "src/*.cpp",
-                //"libs/*.cpp",
+                //"libs/ENG/*.cpp",
                 
                 "-I", "${workspaceFolder}",
                 "-I", "${workspaceFolder}/include",
@@ -25,6 +25,7 @@
                 "-I", "${workspaceFolder}/libs/SDL_image/include",
                 "-I", "${workspaceFolder}/libs/SDL_net/include",
                 "-I", "${workspaceFolder}/libs/SDL_ttf/include",
+                "-I", "${workspaceFolder}/libs/json/include",
 
                 "SDL3.dll",
                 "SDL3_mixer.dll",
