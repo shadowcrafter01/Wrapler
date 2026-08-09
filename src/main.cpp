@@ -18,10 +18,7 @@ int main(int argc, char *argv[])
 
     ENG::input.RegisterMouseUp_R(onMouseClick);
     ENG::input.RegisterMouseDown_L(onMouseClick2);
-    ENG::input.RegisterMouseDown_R(onMouseClick3);
-
-    //ENG_File filetest = ENG_File("test_file.json");
-    
+    ENG::input.RegisterMouseDown_R(onMouseClick3);    
 
     float test_number;
     bool test_bool;
