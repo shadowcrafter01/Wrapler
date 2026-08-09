@@ -87,9 +87,12 @@ public:
         {
             if (follow_up == "")
             {
-                follow_up = SDL_GetError();
+                std::cout << "Failed in " << std::to_string(timer->now_ms() - timeStore) << "ms -> " << SDL_GetError() << "\n";
             }
-            std::cout << "Failed in " << std::to_string(timer->now_ms() - timeStore) << "ms -> " << follow_up << "\n";
+            else
+            {
+                std::cout << "Failed in " << std::to_string(timer->now_ms() - timeStore) << "ms -> " << follow_up << " -> " << SDL_GetError() << "\n";
+            }
         }
     }
 };

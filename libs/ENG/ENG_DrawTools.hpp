@@ -41,35 +41,23 @@ private:
     }
 
 public:
-    inline static void DrawTexture(ENG_Camera *camera, ENG_Texture *texture, Vector2<double> position, double size = 1, double angle = 0, colorRGBA color = colorRGBA(255, 255, 255, 255))
+    inline static void DrawTexture(ENG_Texture *texture, Vector2<double> position, double size = 1, double angle = 0, colorRGBA color = colorRGBA(255, 255, 255, 255))
     {
-        switch (texture->state)
-        {
-        case -1:
-            ENG_Console::LogError((std::string) "Tried to draw invalid texture [" + texture->path + "]");
-            return;
-            break;
-        case 2:
-            // do nothing
-            break;
-        default:
-            texture->load(camera->window);
-            break;
-        }
-        Vector2<double> pos = projectToCamera(camera, position);
+
+        Vector2<double> pos = projectToCamera(texture->camera, position);
         SDL_FRect r;
-        r.h = size * camera->zoom * texture->size.y;
-        r.w = size * camera->zoom * texture->size.x;
+        r.h = size * texture->camera->zoom * texture->size.y;
+        r.w = size * texture->camera->zoom * texture->size.x;
         r.x = pos.x - (r.w / 2);
         r.y = pos.y - (r.h / 2);
         Vector2<double> vr(r.x, r.y);
 
-        if (onscreen(camera, &vr, sqrt((r.w / 2 * r.w / 2) + (r.h / 2 * r.h / 2))))
+        if (onscreen(texture->camera, &vr, sqrt((r.w / 2 * r.w / 2) + (r.h / 2 * r.h / 2))))
         {
             SDL_SetTextureBlendMode(texture->pointer, SDL_BLENDMODE_BLEND);
             SDL_SetTextureColorMod(texture->pointer, color.red, color.green, color.blue);
             SDL_SetTextureAlphaMod(texture->pointer, color.alpha);
-            SDL_RenderTextureRotated(camera->window->renderer, texture->pointer, NULL, &r, angle + camera->angle, NULL, SDL_FLIP_NONE);
+            SDL_RenderTextureRotated(texture->camera->window->renderer, texture->pointer, NULL, &r, angle + texture->camera->angle, NULL, SDL_FLIP_NONE);
         }
     }
 
@@ -86,8 +74,8 @@ public:
         SDL_FRect r;
         r.h = size * scale.x * camera->zoom * textSurface->h;
         r.w = size * scale.y * camera->zoom * textSurface->w;
-        r.x = pos.x;                                          
-        r.y = pos.y;                                          
+        r.x = pos.x;
+        r.y = pos.y;
         Vector2<double> vr(r.x, r.y);
 
         if (onscreen(camera, &vr, sqrt((r.w / 2 * r.w / 2) + (r.h / 2 * r.h / 2))))

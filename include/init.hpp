@@ -6,6 +6,7 @@
 struct WIN
 {
     inline static ENG_Window primary = ENG::CreateWindow("le wrapler rawr", Vector2(640, 480), SDL_WINDOW_RESIZABLE);
+    inline static ENG_Window test = ENG::CreateWindow("test", Vector2(640, 480), SDL_WINDOW_RESIZABLE);
 };
 
 struct FNT
@@ -14,14 +15,16 @@ struct FNT
     inline static ENG_Font cu = ENG::CreateFont("data/fonts/Retro.Gaming.Extended.ttf", 24);
 };
 
-struct TEX
-{
-    inline static ENG_Texture billGates = ENG::CreateTexture("data/textures/billGates.bmp");
-};
-
 struct CAM
 {
     inline static ENG_Camera primary = ENG::CreateCamera(&WIN::primary);
+    inline static ENG_Camera test = ENG::CreateCamera(&WIN::test);
+};
+
+struct TEX
+{
+    inline static ENG_Texture billGates = ENG::CreateTexture(&CAM::primary, "data/textures/billGates.bmp");
+    inline static ENG_Texture test = ENG::CreateTexture(&CAM::test, "data/textures/billGates.bmp");
 };
 
 struct AUD
@@ -30,10 +33,11 @@ struct AUD
     inline static ENG_Audio boom2 = ENG::CreateAudio("data/sounds/vine-boom.mp3");
 };
 
-struct TTF
+struct JSON
 {
-    /* data */
+    inline static ENG_File test = ENG::CreateFile("test_file.json");
 };
+
 
 
 #include "ENG_Timer.hpp"

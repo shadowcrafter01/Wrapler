@@ -31,19 +31,29 @@ public:
 
     inline static bool Init(const char *appname, const char *appversion, const char *appidentifier)
     {
+        bool flag = false;
+        console.LogLoadStart("Initializing engine");
         // metadata
-        if (!SDL_SetAppMetadata(appname,appversion,appidentifier))
+        if (!SDL_SetAppMetadata(appname, appversion, appidentifier))
         {
-            console.LogError("Error setting metadata");
+            flag = true;
         }
 
         // init sdl
         if (!SDL_Init(SDL_INIT_VIDEO))
         {
-            console.LogError("Error initializing SDL3");
+            console.LogLoadEnd(false, "Error initializing SDL3");
             return false;
         }
 
+        if (flag)
+        {
+            console.LogLoadEnd(true, (std::string) "Non-fatal errors encountered -> " + SDL_GetError());
+        }
+        else
+        {
+            console.LogLoadEnd(true, "Engine started!");
+        }
         GAMESTATE = true;
         return true;
     }
@@ -93,9 +103,9 @@ public:
     {
         return ENG_Window(title, size, flags);
     }
-    inline static ENG_Texture CreateTexture(const char *path)
+    inline static ENG_Texture CreateTexture(ENG_Camera *camera, const char *path)
     {
-        return ENG_Texture(path);
+        return ENG_Texture(camera, path);
     }
     inline static ENG_Camera CreateCamera(ENG_Window *window, Vector2<double> position = Vector2<double>(0, 0), double zoom = 1, double angle = 0)
     {
@@ -108,6 +118,10 @@ public:
     inline static ENG_Audio CreateAudio(const char *path)
     {
         return ENG_Audio(path);
+    }
+    inline static ENG_File CreateFile(const char *path)
+    {
+        return ENG_File(path);
     }
 };
 

@@ -17,7 +17,6 @@ public:
     {
         if (!flag_mixerInit)
         {
-            flag_mixerInit = true;
             ENG_Console::LogLoadStart("Initializing mixer");
             if (!MIX_Init())
             {
@@ -31,6 +30,7 @@ public:
                 return;
             }
             ENG_Console::LogLoadEnd(true);
+            flag_mixerInit = true;
         }
         ENG_Console::LogLoadStart((std::string) "Loading audio file [" + path + "]");
         audio = MIX_LoadAudio(mixer, path, false);

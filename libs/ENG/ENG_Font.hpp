@@ -10,29 +10,32 @@
 class ENG_Font
 {
 private:
-    static inline bool ttf_init = false;
+    static inline bool flag_ttfInit = false;
 
 public:
     ENG_Font(std::string path, int point) : path{path},
                                             point{point}
     {
-        if (!ttf_init)
+        if (!flag_ttfInit)
         {
+            ENG_Console::LogLoadStart("Initializing SDL_TTF");
             if (!TTF_Init())
             {
-                ENG_Console::LogError("Could not initialize SDL_ttf");
+                ENG_Console::LogLoadEnd(false);
                 return;
             }
+            ENG_Console::LogLoadEnd(true);
+            flag_ttfInit = true;
         }
         ENG_Console::LogLoadStart("Loading TTF font [" + path + "]");
         font = TTF_OpenFont(path.c_str(), point);
-        if (!font)
+        if (font == NULL)
         {
             ENG_Console::LogLoadEnd(false);
             return;
         }
         ENG_Console::LogLoadEnd(true);
-        bool state = true;
+        state = true;
     }
     TTF_Text *MakeText(std::string text, ENG_Window *window)
     {

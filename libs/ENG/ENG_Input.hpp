@@ -180,7 +180,34 @@ public:
     }
     static Vector2<float> GetMouseWorldPos(ENG_Camera *camera)
     {
-        Vector2<float> out(_mouseX,_mouseY);
+        //        Vector2<float> out(_mouseX, _mouseY);
+        //
+        //        out.x -= camera->window->center.x;
+        //        out.y -= camera->window->center.y;
+        //
+        //        out.y *= -1;
+        //
+        //        out.Rotate(camera->angle);
+        //
+        //        out /= camera->zoom;
+        //
+        //        out.x += camera->position.x;
+        //        out.y += camera->position.y;
+        //
+        //        return out;
+
+        float globalX;
+        float globalY;
+        SDL_GetGlobalMouseState(&globalX, &globalY);
+
+        int winX;
+        int winY;
+        SDL_GetWindowPosition(camera->window->pointer, &winX, &winY);
+
+        float outX = globalX - static_cast<float>(winX);
+        float outY = globalY - static_cast<float>(winY);
+
+        Vector2 out(outX, outY);
 
         out.x -= camera->window->center.x;
         out.y -= camera->window->center.y;
