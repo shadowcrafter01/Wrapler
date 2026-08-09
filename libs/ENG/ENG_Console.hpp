@@ -76,7 +76,7 @@ public:
         {
             if (follow_up == "")
             {
-                std::cout << "Success in " << std::to_string(timer->now_ms() - timeStore) << "\n";
+                std::cout << "Success in " << std::to_string(timer->now_ms() - timeStore) << "ms\n";
             }
             else
             {
@@ -89,7 +89,7 @@ public:
             {
                 follow_up = SDL_GetError();
             }
-            std::cout << "Load failed in " << std::to_string(timer->now_ms() - timeStore) << "ms -> " << follow_up << "\n";
+            std::cout << "Failed in " << std::to_string(timer->now_ms() - timeStore) << "ms -> " << follow_up << "\n";
         }
     }
 };

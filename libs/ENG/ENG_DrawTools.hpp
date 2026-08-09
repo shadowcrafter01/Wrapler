@@ -75,7 +75,7 @@ public:
 
     inline static void DrawFont(ENG_Camera *camera, ENG_Font *font, std::string message, Vector2<double> position, double size = 1, double angle = 0, colorRGBA color = colorRGBA(255, 255, 255, 255), Vector2<double> scale = Vector2<double>(1, 1))
     {
-        if (message == "")
+        if (message == "" || !font->state)
         {
             return;
         }

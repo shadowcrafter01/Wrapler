@@ -9,33 +9,38 @@
 class ENG_Audio
 {
 private:
-    void InitMixer()
-    {
-        if (!MIX_Init())
-        {
-            SDL_Log("Couldn't init SDL_mixer library: %s", SDL_GetError());
-            // return false;
-        }
-        mixer = MIX_CreateMixerDevice(SDL_AUDIO_DEVICE_DEFAULT_PLAYBACK, NULL);
-        if (!mixer)
-        {
-            SDL_Log("Couldn't create mixer on default device: %s", SDL_GetError());
-            // return false;
-        }
-    }
     static inline MIX_Mixer *mixer;
-    static inline bool mixer_init = false;
+    static inline bool flag_mixerInit = false;
+
 public:
     ENG_Audio(const char *path)
     {
-        if (!mixer_init)
+        if (!flag_mixerInit)
         {
-            InitMixer();
+            flag_mixerInit = true;
+            ENG_Console::LogLoadStart("Initializing mixer");
+            if (!MIX_Init())
+            {
+                ENG_Console::LogLoadEnd(false);
+                return;
+            }
+            mixer = MIX_CreateMixerDevice(SDL_AUDIO_DEVICE_DEFAULT_PLAYBACK, NULL);
+            if (mixer == NULL)
+            {
+                ENG_Console::LogLoadEnd(false);
+                return;
+            }
+            ENG_Console::LogLoadEnd(true);
         }
+        ENG_Console::LogLoadStart((std::string) "Loading audio file [" + path + "]");
         audio = MIX_LoadAudio(mixer, path, false);
-        if (!audio)
+        if (audio == NULL)
         {
+            ENG_Console::LogLoadEnd(false);
+            return;
         }
+        ENG_Console::LogLoadEnd(true);
+        state = true;
     }
 
     void Play()
@@ -47,6 +52,7 @@ public:
     }
 
     MIX_Audio *audio;
+    bool state = false;
 };
 
 #endif

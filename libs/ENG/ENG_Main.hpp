@@ -29,18 +29,18 @@ public:
     {
     }
 
-    inline static bool Init()
+    inline static bool Init(const char *appname, const char *appversion, const char *appidentifier)
     {
         // metadata
-        if (!SDL_SetAppMetadata("Wrapler", "0.0", "com.wrapler.engine"))
+        if (!SDL_SetAppMetadata(appname,appversion,appidentifier))
         {
-            return false;
+            console.LogError("Error setting metadata");
         }
 
         // init sdl
         if (!SDL_Init(SDL_INIT_VIDEO))
         {
-            SDL_Log("SDL init error: %s", SDL_GetError());
+            console.LogError("Error initializing SDL3");
             return false;
         }
 
@@ -80,6 +80,7 @@ public:
     inline static void Shutdown()
     {
         SDL_Quit();
+        TTF_Quit();
     }
 
     inline static bool GAMESTATE = false;

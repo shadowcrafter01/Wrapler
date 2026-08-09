@@ -9,7 +9,7 @@ void onMouseClick3();
 
 int main(int argc, char *argv[])
 {
-    ENG::Init();
+    ENG::Init("Wrapler", "0.0", "com.wrapler.engine");
 
     WIN::primary.SetIcon("data/textures/billGates.bmp");
 

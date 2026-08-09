@@ -10,18 +10,6 @@
 class ENG_Font
 {
 private:
-    void InitTTF()
-    {
-        if (!TTF_Init())
-        {
-            SDL_Log("Couldn't initialize SDL_ttf: %s\n", SDL_GetError());
-        }
-        // ttfengine = TTF_CreateRendererTextEngine(WIN.prime.renderer.pointer);
-        // if (!ttfengine)
-        //{
-        //     SDL_Log("Couldn't create text engine: %s\n", SDL_GetError());
-        // }
-    }
     static inline bool ttf_init = false;
 
 public:
@@ -30,13 +18,21 @@ public:
     {
         if (!ttf_init)
         {
-            InitTTF();
+            if (!TTF_Init())
+            {
+                ENG_Console::LogError("Could not initialize SDL_ttf");
+                return;
+            }
         }
+        ENG_Console::LogLoadStart("Loading TTF font [" + path + "]");
         font = TTF_OpenFont(path.c_str(), point);
         if (!font)
         {
-            ENG_Console::LogError("Could not open font: [" + path + "]");
+            ENG_Console::LogLoadEnd(false);
+            return;
         }
+        ENG_Console::LogLoadEnd(true);
+        bool state = true;
     }
     TTF_Text *MakeText(std::string text, ENG_Window *window)
     {
@@ -47,6 +43,7 @@ public:
     TTF_Font *font;
     std::string path;
     int point;
+    bool state = false;
 };
 
 #endif
