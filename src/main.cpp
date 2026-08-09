@@ -13,6 +13,7 @@ int main(int argc, char *argv[])
 
     WIN::primary.SetIcon("data/textures/billGates.bmp");
 
+    
     ENG::console.LogInfo("test");
     ENG::console.LogDebug(ENG::timer.now_ns());
 
