@@ -3,8 +3,6 @@
 
 #include "game.hpp"
 
-
-
 void onMouseClick();
 void onMouseClick2();
 void onMouseClick3();
@@ -18,8 +16,9 @@ int main(int argc, char *argv[])
     ENG::console.LogInfo("test");
     ENG::console.LogDebug(ENG::timer.now_ns());
 
-    TTF_Text *testtext = FNT::sonic2.MakeText("test", &WIN::primary);
-    TTF_Text *cutest = FNT::cu.MakeText("let's not give up just yet", &WIN::primary);
+    // TTF_Text *testtext = FNT::sonic2.MakeText("test", &WIN::primary);
+    TTF_Text *test = FNT::cu.MakeText("let's not give up just yet", &WIN::primary);
+    // TTF_Text *fps = FNT::cu.MakeText(std::to_string(ENG::timer.FPS),&WIN::primary);
 
     ENG::input.RegisterMouseUp_R(onMouseClick);
     ENG::input.RegisterMouseDown_L(onMouseClick2);
@@ -34,16 +33,20 @@ int main(int argc, char *argv[])
     while (ENG::Update())
     {
 
-        mainTick();
-        TTF_DrawRendererText(testtext, 0, 0);
-        TTF_DrawRendererText(cutest, 0, 20);
+        // mainTick();
+        controls();
 
-        if (ENG::input.GetMouseState(SDL_BUTTON_LEFT))
+        
+
+        for (int i = 0; i <= 100; i++)
         {
-            ENG::console.LogInfo("ooga booga");
+            for (int j = 0; j <= 100; j++)
+            {
+                ENG::draw.DrawTexture(&CAM::primary, &TEX::billGates, Vector2(i * 100, j * 100), 1, ENG::timer.now_s() * 60);
+            }
+            ENG::draw.DrawFont(&CAM::primary, &FNT::cu, "test", Vector2(i * 100, -100));
         }
-
-        // TTF_DrawRendererText(FNT::cu.MakeText(std::to_string(ENG::timer.FPS),&WIN::primary),ENG::input.getMousePos().x,ENG::input.getMousePos().y);
+        ENG::draw.DrawTexture(&CAM::primary, &TEX::billGates, ENG::input.GetMouseWorldPos(&CAM::primary), 0.5);
     }
     ENG::Shutdown();
     return 0;

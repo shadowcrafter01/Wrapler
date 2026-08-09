@@ -16,7 +16,7 @@ struct FNT
 
 struct TEX
 {
-    inline static ENG_Texture billGates = ENG::CreateTexture("data/textures/billGates.bmp", &WIN::primary);
+    inline static ENG_Texture billGates = ENG::CreateTexture("data/textures/billGates.bmp");
 };
 
 struct CAM
@@ -24,11 +24,15 @@ struct CAM
     inline static ENG_Camera primary = ENG::CreateCamera(&WIN::primary);
 };
 
-
 struct AUD
 {
     inline static ENG_Audio boom = ENG::CreateAudio("data/sounds/vine-boom.mp3");
     inline static ENG_Audio boom2 = ENG::CreateAudio("data/sounds/vine-boom.mp3");
+};
+
+struct TTF
+{
+    /* data */
 };
 
 

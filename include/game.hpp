@@ -3,6 +3,7 @@
 
 
 void mainTick();
+void controls();
 
 
 #endif

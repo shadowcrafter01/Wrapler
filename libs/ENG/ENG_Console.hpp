@@ -31,10 +31,11 @@ private:
         return "[" + buffer + "]";
     }
 
-    inline static ENG_Timer* timer;
+    inline static ENG_Timer *timer;
+    inline static double timeStore;
 
 public:
-    ENG_Console(ENG_Timer* timer_in)
+    ENG_Console(ENG_Timer *timer_in)
     {
         timer = timer_in;
     }
@@ -63,7 +64,24 @@ public:
     {
         std::cout << reportCurrentMS() << " -ERROR: " << message << " -> " << error << "\n";
     }
+
+    static void LogLoadStart(std::string message)
+    {
+        std::cout << reportCurrentMS() << " -LOAD : " << message << "... ";
+        timeStore = timer->now_ms();
+    }
+    static void LogLoadEnd(bool success, std::string follow_up = "")
+    {
+        if (success)
+        {
+            std::cout << "Success in " << std::to_string(timer->now_ms() - timeStore) << "ms -> " << follow_up << "\n";
+        }
+        else
+        {
+            std::cout << "Load failed in " << std::to_string(timer->now_ms() - timeStore) << "ms -> " << follow_up << "\n";
+        }
+    }
 };
-//static ENG_Console console;
+// static ENG_Console console;
 
 #endif

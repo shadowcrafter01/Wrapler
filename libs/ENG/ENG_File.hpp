@@ -42,7 +42,7 @@ public:
         if (!j[name.c_str()].empty())
         {
             *value = j[name.c_str()];
-            ENG_Console::LogInfo("Read " + name + " -> " + std::to_string(*value) + " from file: " + path, " -FILE : ");
+            ENG_Console::LogInfo("Read " + name + " -> " + std::to_string(*value) + " from file [" + path + "]", " -FILE : ");
             return;
         }
         ENG_Console::LogWarn("Tried to read null from JSON [" + path + "], initializing with and returning default value");
@@ -58,7 +58,7 @@ public:
         j[name] = value;
         fileOut << j.dump();
         fileOut.close();
-        ENG_Console::LogInfo("Write " + name + " <- " + std::to_string(value) + " to file: " + path, " -FILE : ");
+        ENG_Console::LogInfo("Write " + name + " <- " + std::to_string(value) + " to file [" + path + "]", " -FILE : ");
     }
 };
 

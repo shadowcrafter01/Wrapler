@@ -19,6 +19,7 @@
 #include "ENG_Input.hpp"
 #include "ENG_Camera.hpp"
 #include "ENG_File.hpp"
+#include "ENG_DrawTools.hpp"
 
 class ENG
 {
@@ -85,14 +86,15 @@ public:
     inline static ENG_Timer timer;
     inline static ENG_Console console = ENG_Console(&timer);
     inline static ENG_Input input;
+    inline static ENG_DrawTools draw;
 
     inline static ENG_Window CreateWindow(const char *title, Vector2<int> size, SDL_WindowFlags flags)
     {
         return ENG_Window(title, size, flags);
     }
-    inline static ENG_Texture CreateTexture(const char *path, ENG_Window *window)
+    inline static ENG_Texture CreateTexture(const char *path)
     {
-        return ENG_Texture(path, window);
+        return ENG_Texture(path);
     }
     inline static ENG_Camera CreateCamera(ENG_Window *window, Vector2<double> position = Vector2<double>(0, 0), double zoom = 1, double angle = 0)
     {

@@ -55,6 +55,7 @@ public:
 
     const char *title;
     Vector2<int> size;
+    Vector2<int> center;
     SDL_WindowFlags flags;
 
     void SetIcon(const char *path)
@@ -70,6 +71,7 @@ public:
     void Update()
     {
         SDL_GetWindowSizeInPixels(pointer, &size.x, &size.y);
+        center=Vector2<int>(size.x/2,size.y/2);
         SDL_RenderPresent(renderer);
         SDL_RenderClear(renderer);
     }

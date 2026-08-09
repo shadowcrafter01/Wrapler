@@ -8,6 +8,8 @@
 #include <functional>
 #include <vector>
 
+#include "ENG_Camera.hpp"
+
 class ENG_Input
 {
 private:
@@ -172,11 +174,29 @@ public:
         return _keys.count(sc) != 0;
     }
 
-    static Vector2<float> getMousePos()
+    static Vector2<float> GetMousePos()
     {
         return Vector2<float>(_mouseX, _mouseY);
     }
-    static Vector2<float> getMouseVel()
+    static Vector2<float> GetMouseWorldPos(ENG_Camera *camera)
+    {
+        Vector2<float> out(_mouseX,_mouseY);
+
+        out.x -= camera->window->center.x;
+        out.y -= camera->window->center.y;
+
+        out.y *= -1;
+
+        out.Rotate(camera->angle);
+
+        out /= camera->zoom;
+
+        out.x += camera->position.x;
+        out.y += camera->position.y;
+
+        return out;
+    }
+    static Vector2<float> GetMouseVel()
     {
         return Vector2<float>(_mouseU, _mouseV);
     }

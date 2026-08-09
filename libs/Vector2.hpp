@@ -17,6 +17,40 @@ public:
     T x;
     T y;
 
+    Vector2<T> Norm(bool return_only = true)
+    {
+        T abs = sqrt((x * x) + (y * y));
+        Vector2<T> out = {x / abs, y / abs};
+        if (!return_only)
+        {
+            x = out.x;
+            y = out.y;
+        }
+        return out;
+    }
+    Vector2<T> Rotate(double angle, bool return_only = false)
+    {
+        T _x = (cos((0.017453293) * (-angle)) * x) + (sin((0.017453293) * (-angle)) * y);
+        T _y = (-sin((0.017453293) * (-angle)) * x) + (cos((0.017453293) * (-angle)) * y);
+        if (!return_only)
+        {
+            x = _x;
+            y = _y;
+        }
+        return Vector2<T>(_x, _y);
+    }
+    Vector2<T> Scale(T factor, bool return_only = false)
+    {
+        T _x = x * factor;
+        T _y = x * factor;
+        if (!return_only)
+        {
+            x = _x;
+            y = _y;
+        }
+        return Vector2<T>(_x,_y);
+    }
+
     template <class U>
     Vector2<T> operator+(const Vector2<U> &r)
     {
