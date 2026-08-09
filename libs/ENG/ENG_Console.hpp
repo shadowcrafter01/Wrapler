@@ -74,10 +74,21 @@ public:
     {
         if (success)
         {
-            std::cout << "Success in " << std::to_string(timer->now_ms() - timeStore) << "ms -> " << follow_up << "\n";
+            if (follow_up == "")
+            {
+                std::cout << "Success in " << std::to_string(timer->now_ms() - timeStore) << "\n";
+            }
+            else
+            {
+                std::cout << "Success in " << std::to_string(timer->now_ms() - timeStore) << "ms -> " << follow_up << "\n";
+            }
         }
         else
         {
+            if (follow_up == "")
+            {
+                follow_up = SDL_GetError();
+            }
             std::cout << "Load failed in " << std::to_string(timer->now_ms() - timeStore) << "ms -> " << follow_up << "\n";
         }
     }

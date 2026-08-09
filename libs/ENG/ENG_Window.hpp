@@ -3,8 +3,11 @@
 
 #include <SDL3/SDL.h>
 #include <SDL3_ttf/SDL_ttf.h>
+#include <SDL3_image/SDL_image.h>
 #include "Vector2.hpp"
 #include <vector>
+#include "ENG_Console.hpp"
+#include <string>
 
 class ENG_Window
 {
@@ -31,20 +34,31 @@ public:
                                                                               size{size},
                                                                               flags{flags}
     {
+        ENG_Console::LogLoadStart((std::string) "Creating window [" + title + "]");
         if (!SDL_CreateWindowAndRenderer(title, size.x, size.y, flags, &pointer, &renderer.pointer))
         {
-            // return SDL_APP_FAILURE;
+            ENG_Console::LogLoadEnd(false);
+            return;
         }
-        SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
+        if (!SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0))
+        {
+            ENG_Console::LogLoadEnd(false);
+            return;
+        }
         ttfEngine = TTF_CreateRendererTextEngine(renderer);
+        if (ttfEngine == NULL)
+        {
+            ENG_Console::LogLoadEnd(false);
+        }
         instances().push_back(this);
+        ENG_Console::LogLoadEnd(true);
     }
-    ~ENG_Window()
-    {
-        //std::vector<ENG_Window*> &v = instances();
-        if (renderer.pointer) SDL_DestroyRenderer(renderer);
-        if (pointer) SDL_DestroyWindow(pointer);
-    }
+//    ~ENG_Window()
+//    {
+//        //std::vector<ENG_Window*> &v = instances();
+//        if (renderer.pointer) SDL_DestroyRenderer(renderer);
+//        if (pointer) SDL_DestroyWindow(pointer);
+//    }
 
     //ENG_Window(const ENG_Window&) = delete;
     //ENG_Window& operator=(const ENG_Window&) = delete;
@@ -60,12 +74,17 @@ public:
 
     void SetIcon(const char *path)
     {
-        SDL_Surface *surface = SDL_LoadBMP(path);
+        SDL_Surface *surface = IMG_Load(path);
+        if (surface == NULL)
+        {
+            ENG_Console::LogError((std::string) "Error loading texture file [" + path + "] for window [" + title + "] icon");
+            return;
+        }
         int width = surface->w;
         int height = surface->h;
         if (!SDL_SetWindowIcon(pointer, surface))
         {
-            SDL_Log("texture no exist: %s", SDL_GetError());
+            ENG_Console::LogError((std::string) "Error applying texture file [" + path + "] to window [" + title + "] icon");
         }
     }
     void Update()
