@@ -13,21 +13,27 @@ int main(int argc, char *argv[])
 
     WIN::primary.SetIcon("data/textures/billGates.bmp");
 
-    
     ENG::console.LogInfo("test");
     ENG::console.LogDebug(ENG::timer.now_ns());
 
     ENG::input.RegisterMouseUp_R(onMouseClick);
     ENG::input.RegisterMouseDown_L(onMouseClick2);
-    ENG::input.RegisterMouseDown_R(onMouseClick3);    
+    ENG::input.RegisterMouseDown_R(onMouseClick3);
 
     float test_number;
     bool test_bool;
-    JSON::test.readProperty("test_number", &test_number, 0.0f);
-    JSON::test.readProperty("test_bool", &test_bool, false);
+    JSON::test.readProperty<float>("test_number", &test_number, 0);
+    JSON::test.readProperty<bool>("test_bool", &test_bool, false);
+
+    double averageFPS = 0;
+    double averageFPS_old;
+    double averageFPS_best;
+    JSON::test.readProperty("average_fps",&averageFPS_old,0.0);
+    JSON::test.readProperty("average_fps_best",&averageFPS_best,0.0);
 
     while (ENG::Update())
     {
+        averageFPS = (0.999 * averageFPS) + ((1-0.999) * ENG::timer.FPS);
         controls();
 
         for (int i = 0; i <= 100; i++)
@@ -40,7 +46,18 @@ int main(int argc, char *argv[])
         }
         ENG::draw.DrawTexture(&TEX::billGates, ENG::input.GetMouseWorldPos(&CAM::primary), 0.5);
         ENG::draw.DrawTexture(&TEX::test, ENG::input.GetMouseWorldPos(&CAM::test), 0.5);
+        ENG::draw.DrawFont(&CAM::test, &FNT::cu, std::to_string(ENG::draw.textureDrawCount), WIN::test.size * Vector2(-0.5, 0.5));
+        ENG::draw.DrawFont(&CAM::test, &FNT::cu, std::to_string(averageFPS), (WIN::test.size * Vector2(-0.5, 0.5)) + Vector2(0, -20));
+        ENG::draw.DrawFont(&CAM::test, &FNT::cu, std::to_string(averageFPS_old), (WIN::test.size * Vector2(-0.5, 0.5)) + Vector2(0, -40));
+        ENG::draw.DrawFont(&CAM::test, &FNT::cu, std::to_string(averageFPS_best), (WIN::test.size * Vector2(-0.5, 0.5)) + Vector2(0, -60));
     }
+    JSON::test.writeProperty<double>("average_fps",averageFPS);
+
+    if (averageFPS > averageFPS_best)
+    {
+        JSON::test.writeProperty<double>("average_fps_best",averageFPS);
+    }
+
     ENG::Shutdown();
     return 0;
 }

@@ -52,12 +52,13 @@ public:
         r.y = pos.y - (r.h / 2);
         Vector2<double> vr(r.x, r.y);
 
-        if (onscreen(texture->camera, &vr, sqrt((r.w / 2 * r.w / 2) + (r.h / 2 * r.h / 2))))
+        if (onscreen(texture->camera, &vr, sqrt((r.w / 2 * r.w / 2) + (r.h / 2 * r.h / 2)))) 
         {
             SDL_SetTextureBlendMode(texture->pointer, SDL_BLENDMODE_BLEND);
             SDL_SetTextureColorMod(texture->pointer, color.red, color.green, color.blue);
             SDL_SetTextureAlphaMod(texture->pointer, color.alpha);
             SDL_RenderTextureRotated(texture->camera->window->renderer, texture->pointer, NULL, &r, angle + texture->camera->angle, NULL, SDL_FLIP_NONE);
+            textureDrawCount++;
         }
     }
 
@@ -88,6 +89,7 @@ public:
         SDL_DestroySurface(textSurface);
         SDL_DestroyTexture(texture);
     }
+    inline static int textureDrawCount = 0;
 };
 
 #endif

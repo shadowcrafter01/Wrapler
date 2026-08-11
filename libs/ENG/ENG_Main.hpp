@@ -83,7 +83,7 @@ public:
         Event();
         ENG_Window::UpdateAll();
         timer.update();
-
+        draw.textureDrawCount = 0;
         return GAMESTATE;
     }
 
@@ -98,6 +98,8 @@ public:
     inline static ENG_Console console = ENG_Console(&timer);
     inline static ENG_Input input;
     inline static ENG_DrawTools draw;
+
+    
 
     inline static ENG_Window CreateWindow(const char *title, Vector2<int> size, SDL_WindowFlags flags)
     {
