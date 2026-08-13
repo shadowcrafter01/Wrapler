@@ -23,8 +23,8 @@ struct CAM
 
 struct TEX
 {
-    inline static ENG_Texture billGates = ENG::CreateTexture(&CAM::primary, "data/textures/billGates.bmp");
-    inline static ENG_Texture test = ENG::CreateTexture(&CAM::test, "data/textures/billGates.bmp");
+    inline static ENG_Texture billGates = ENG::CreateTexture("data/textures/billGates.bmp");
+    inline static ENG_Texture test = ENG::CreateTexture("data/textures/billGates.bmp");
 };
 
 struct AUD

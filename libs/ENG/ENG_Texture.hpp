@@ -11,9 +11,9 @@
 class ENG_Texture
 {
 private:
+
 public:
-    ENG_Texture(ENG_Camera *camera, const char *path) : path{path},
-                                                        camera{camera}
+    ENG_Texture(const char *path) : path{path}
     {
         ENG_Console::LogLoadStart((std::string) "Loading texture [" + path + "]");
 
@@ -24,15 +24,17 @@ public:
             return;
         }
         size = Vector2<int>(surface->w, surface->h);
-        pointer = SDL_CreateTextureFromSurface(camera->window->renderer, surface);
-        if (pointer == NULL)
-        {
-            ENG_Console::LogLoadEnd(false);
-            return;
-        }
+        //pointer = SDL_CreateTextureFromSurface(camera->window->renderer, surface);
+        //if (pointer == NULL)
+        //{
+        //    ENG_Console::LogLoadEnd(false);
+        //    return;
+        //}
         ENG_Console::LogLoadEnd(true);
         state = true;
     }
+
+    
 
     int width;
     int height;
@@ -41,7 +43,6 @@ public:
     SDL_Surface *surface;
     bool state = false;
     Vector2<int> size;
-    ENG_Camera *camera;
 };
 
 #endif

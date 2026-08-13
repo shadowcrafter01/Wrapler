@@ -27,8 +27,6 @@ private:
         return v;
     }
 
-    //static std::vector<ENG_Window*> &instances;
-
 public:
     ENG_Window(const char *title, Vector2<int> size, SDL_WindowFlags flags) : title{title},
                                                                               size{size},
@@ -53,15 +51,15 @@ public:
         instances().push_back(this);
         ENG_Console::LogLoadEnd(true);
     }
-//    ~ENG_Window()
-//    {
-//        //std::vector<ENG_Window*> &v = instances();
-//        if (renderer.pointer) SDL_DestroyRenderer(renderer);
-//        if (pointer) SDL_DestroyWindow(pointer);
-//    }
+    //    ~ENG_Window()
+    //    {
+    //        //std::vector<ENG_Window*> &v = instances();
+    //        if (renderer.pointer) SDL_DestroyRenderer(renderer);
+    //        if (pointer) SDL_DestroyWindow(pointer);
+    //    }
 
-    //ENG_Window(const ENG_Window&) = delete;
-    //ENG_Window& operator=(const ENG_Window&) = delete;
+    // ENG_Window(const ENG_Window&) = delete;
+    // ENG_Window& operator=(const ENG_Window&) = delete;
 
     SDL_Window *pointer;
     ENG_Renderer renderer;
@@ -89,8 +87,9 @@ public:
     }
     void Update()
     {
+        SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
         SDL_GetWindowSizeInPixels(pointer, &size.x, &size.y);
-        center=Vector2<int>(size.x/2,size.y/2);
+        center = Vector2<int>(size.x / 2, size.y / 2);
         SDL_RenderPresent(renderer);
         SDL_RenderClear(renderer);
     }
@@ -100,6 +99,10 @@ public:
         {
             w->Update();
         }
+    }
+    static std::vector<ENG_Window *> &GetAllWindows()
+    {
+        return instances();
     }
 };
 

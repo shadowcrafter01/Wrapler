@@ -105,9 +105,9 @@ public:
     {
         return ENG_Window(title, size, flags);
     }
-    inline static ENG_Texture CreateTexture(ENG_Camera *camera, const char *path)
+    inline static ENG_Texture CreateTexture(const char *path)
     {
-        return ENG_Texture(camera, path);
+        return ENG_Texture(path);
     }
     inline static ENG_Camera CreateCamera(ENG_Window *window, Vector2<double> position = Vector2<double>(0, 0), double zoom = 1, double angle = 0)
     {

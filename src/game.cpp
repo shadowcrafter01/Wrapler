@@ -8,10 +8,10 @@ void mainTick()
 
 void controls()
 {
-    if (ENG::input.GetMouseState(SDL_BUTTON_LEFT))
-    {
-        ENG::console.LogInfo("ooga booga");
-    }
+    //if (ENG::input.GetMouseState(SDL_BUTTON_LEFT))
+    //{
+    //    ENG::console.LogInfo("ooga booga");
+    //}
 
     if (ENG::input.keyState(SDL_SCANCODE_W))
     {
