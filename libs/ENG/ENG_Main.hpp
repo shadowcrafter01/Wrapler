@@ -20,6 +20,7 @@
 #include "ENG_Camera.hpp"
 #include "ENG_File.hpp"
 #include "ENG_DrawTools.hpp"
+#include "ENG_Dingus.hpp"
 
 class ENG
 {
@@ -82,6 +83,7 @@ public:
     {
         Event();
         ENG_Window::UpdateAll();
+        ENG_Dingus::UpdateAll();
         timer.update();
         draw.textureDrawCount = 0;
         return GAMESTATE;
@@ -124,6 +126,12 @@ public:
     inline static ENG_File CreateFile(const char *path)
     {
         return ENG_File(path);
+    }
+    inline static ENG_Dingus CreateDingus(ENG_Camera *camera, ENG_Texture *texture)
+    {
+        ENG_Dingus dingus = ENG_Dingus(camera,texture);
+        dingus.AssignTimer(&timer);
+        return dingus;
     }
 };
 

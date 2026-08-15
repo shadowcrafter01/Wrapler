@@ -42,7 +42,7 @@ public:
     Vector2<T> Scale(T factor, bool return_only = false)
     {
         T _x = x * factor;
-        T _y = x * factor;
+        T _y = y * factor;
         if (!return_only)
         {
             x = _x;

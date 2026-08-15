@@ -6,7 +6,7 @@
 struct WIN
 {
     inline static ENG_Window primary = ENG::CreateWindow("le wrapler rawr", Vector2(640, 480), SDL_WINDOW_RESIZABLE);
-    inline static ENG_Window test = ENG::CreateWindow("test", Vector2(640, 480), SDL_WINDOW_RESIZABLE);
+    //inline static ENG_Window test = ENG::CreateWindow("test", Vector2(640, 480), SDL_WINDOW_RESIZABLE);
 };
 
 struct FNT
@@ -18,13 +18,13 @@ struct FNT
 struct CAM
 {
     inline static ENG_Camera primary = ENG::CreateCamera(&WIN::primary);
-    inline static ENG_Camera test = ENG::CreateCamera(&WIN::test);
+    //inline static ENG_Camera test = ENG::CreateCamera(&WIN::test);
 };
 
 struct TEX
 { // each texture has to be attached to a specific window
     inline static ENG_Texture billGates = ENG::CreateTexture(&WIN::primary, "data/textures/billGates.bmp");
-    inline static ENG_Texture test = ENG::CreateTexture(&WIN::test, "data/textures/billGates.bmp");
+    //inline static ENG_Texture test = ENG::CreateTexture(&WIN::test, "data/textures/billGates.bmp");
 };
 
 struct AUD
@@ -37,6 +37,12 @@ struct JSON
 {
     inline static ENG_File test = ENG::CreateFile("test_file.json");
 };
+
+struct DINGUS
+{
+    inline static ENG_Dingus test = ENG::CreateDingus(&CAM::primary, &TEX::billGates);
+};
+
 
 #include "ENG_Timer.hpp"
 
