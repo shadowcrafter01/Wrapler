@@ -62,6 +62,7 @@ int main(int argc, char *argv[])
         ENG::draw.DrawFont(&CAM::test, &FNT::cu, std::to_string(averageFPS_best), (WIN::test.size * Vector2(-0.5, 0.5)) + Vector2(0, -60));
 
     }
+    
     JSON::test.writeProperty<double>("average_fps", averageFPS);
 
     if (averageFPS > averageFPS_best)

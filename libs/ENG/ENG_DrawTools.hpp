@@ -52,15 +52,15 @@ public:
         r.y = pos.y - (r.h / 2);
         Vector2<double> vr(r.x, r.y);
 
-        if (onscreen(camera, &vr, sqrt((r.w / 2 * r.w / 2) + (r.h / 2 * r.h / 2)))) 
+        if (onscreen(camera, &vr, sqrt((r.w / 2 * r.w / 2) + (r.h / 2 * r.h / 2))))
         {
-            texture->pointer = SDL_CreateTextureFromSurface(camera->window->renderer, texture->surface);
+            // texture->pointer = SDL_CreateTextureFromSurface(camera->window->renderer, texture->surface);
             SDL_SetTextureBlendMode(texture->pointer, SDL_BLENDMODE_BLEND);
             SDL_SetTextureColorMod(texture->pointer, color.red, color.green, color.blue);
             SDL_SetTextureAlphaMod(texture->pointer, color.alpha);
-            SDL_RenderTextureRotated(camera->window->renderer, texture->pointer, NULL, &r, angle + camera->angle, NULL, SDL_FLIP_NONE);
+            SDL_RenderTextureRotated(texture->renderer, texture->pointer, NULL, &r, angle + camera->angle, NULL, SDL_FLIP_NONE);
             textureDrawCount++;
-            SDL_DestroyTexture(texture->pointer);
+            // SDL_DestroyTexture(texture->pointer);
         }
     }
 

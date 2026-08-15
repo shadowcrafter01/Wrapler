@@ -22,9 +22,9 @@ struct CAM
 };
 
 struct TEX
-{
-    inline static ENG_Texture billGates = ENG::CreateTexture("data/textures/billGates.bmp");
-    inline static ENG_Texture test = ENG::CreateTexture("data/textures/billGates.bmp");
+{ // each texture has to be attached to a specific window
+    inline static ENG_Texture billGates = ENG::CreateTexture(&WIN::primary, "data/textures/billGates.bmp");
+    inline static ENG_Texture test = ENG::CreateTexture(&WIN::test, "data/textures/billGates.bmp");
 };
 
 struct AUD
@@ -37,8 +37,6 @@ struct JSON
 {
     inline static ENG_File test = ENG::CreateFile("test_file.json");
 };
-
-
 
 #include "ENG_Timer.hpp"
 
