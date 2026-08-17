@@ -7,13 +7,15 @@
 
 void onMouseUpR()
 {
-    AUD::boom.Play();
+    // AUD::boom.Play();
+    //DINGUS::test.active = false;
 }
 void onMouseDownL()
 {
     PROCESS_MEMORY_COUNTERS pmc;
     GetProcessMemoryInfo(GetCurrentProcess(), &pmc, sizeof(pmc));
     ENG::console.LogDebug(pmc.WorkingSetSize / 1024);
+    //DINGUS::test.active = true;
 }
 
 int main(int argc, char *argv[])
@@ -39,12 +41,26 @@ int main(int argc, char *argv[])
     JSON::test.readProperty("average_fps", &averageFPS_old, 0.0);
     JSON::test.readProperty("average_fps_best", &averageFPS_best, 0.0);
 
+    GameObject test;
+    //test.AssignCamera(&CAM::primary);
+    //test.AssignTexture(&TEX::billGates);
+    test.AssignTimer(&ENG::timer);
+
+
     while (ENG::Update())
     {
-        averageFPS = (0.99 * averageFPS) + ((1 - 0.99) * ENG::timer.FPS);
+        averageFPS = (0.9 * averageFPS) + ((1 - 0.9) * ENG::timer.FPS);
         controls();
 
-        DINGUS::test.velocity += ((ENG::input.GetMouseWorldPos(&CAM::primary) - DINGUS::test.position).Scale(1) + DINGUS::test.velocity.Scale(-0.5)).Scale(ENG::timer.delta);
+        //DINGUS::test.velocity += ((ENG::input.GetMouseWorldPos(&CAM::primary, true) - DINGUS::test.position).Scale(2, true) + DINGUS::test.velocity.Scale(-0.5, true)).Scale(ENG::timer.delta, true);
+        test.velocity += ((ENG::input.GetMouseWorldPos(&CAM::primary, true) - test.position).Scale(10, true) + test.velocity.Scale(-0.75, true)).Scale(ENG::timer.delta, true);
+
+        ENG::draw.DrawTexture(&CAM::primary,&TEX::billGates,test.position);
+
+        if (ENG::input.keyState(SDL_SCANCODE_SPACE))
+        {
+            SDL_Delay(100);
+        }
 
         // for (int i = 0; i <= 100; i++)
         //{
@@ -57,7 +73,7 @@ int main(int argc, char *argv[])
         // ENG::draw.DrawTexture(&CAM::primary, &TEX::billGates, ENG::input.GetMouseWorldPos(&CAM::primary), 0.5);
         // ENG::draw.DrawTexture(&CAM::test, &TEX::test, ENG::input.GetMouseWorldPos(&CAM::test), 0.5);
         // ENG::draw.DrawFont(&CAM::test, &FNT::cu, std::to_string(ENG::draw.textureDrawCount), WIN::test.size * Vector2(-0.5, 0.5));
-        //ENG::draw.DrawFont(&CAM::test, &FNT::cu, std::to_string(averageFPS), (WIN::test.size * Vector2(-0.5, 0.5)) + Vector2(0, -20));
+        // ENG::draw.DrawFont(&CAM::test, &FNT::cu, std::to_string(averageFPS), (WIN::test.size * Vector2(-0.5, 0.5)) + Vector2(0, -20));
         // ENG::draw.DrawFont(&CAM::test, &FNT::cu, std::to_string(averageFPS_old), (WIN::test.size * Vector2(-0.5, 0.5)) + Vector2(0, -40));
         // ENG::draw.DrawFont(&CAM::test, &FNT::cu, std::to_string(averageFPS_best), (WIN::test.size * Vector2(-0.5, 0.5)) + Vector2(0, -60));
     }

@@ -51,6 +51,7 @@ public:
         return Vector2<T>(_x,_y);
     }
 
+
     template <class U>
     Vector2<T> operator+(const Vector2<U> &r)
     {

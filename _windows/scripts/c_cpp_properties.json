@@ -12,7 +12,8 @@
                 "${workspaceFolder}/include",
                 "${workspaceFolder}/libs/ENG",
                 "${workspaceFolder}/libs/json/include",
-                "${workspaceFolder}/libs/json/include/nlohmann"
+                "${workspaceFolder}/libs/json/include/nlohmann",
+                "${workspaceFolder}/libs"
             ],
             "defines": [
                 "_DEBUG",

@@ -22,6 +22,8 @@ private:
 
     inline static float _mouseX = 0.0f;
     inline static float _mouseY = 0.0f;
+    inline static float _mouseX_fenced = 0.0f;
+    inline static float _mouseY_fenced = 0.0f;
     inline static float _mouseU = 0.0f;
     inline static float _mouseV = 0.0f;
     inline static float _wheelX = 0.0f;
@@ -55,8 +57,10 @@ public:
             int w;
             int h;
             SDL_GetWindowSize(SDL_GetWindowFromID(event.window.windowID), &w, &h);
-            _mouseX = SDL_clamp(event.motion.x, 0, w);
-            _mouseY = SDL_clamp(event.motion.y, 0, h);
+            _mouseX = event.motion.x;
+            _mouseY = event.motion.y;
+            _mouseX_fenced = SDL_clamp(event.motion.x, 0, w);
+            _mouseY_fenced = SDL_clamp(event.motion.y, 0, h);
             _mouseU += event.motion.xrel;
             _mouseV += event.motion.yrel;
             break;
@@ -174,28 +178,19 @@ public:
         return _keys.count(sc) != 0;
     }
 
-    static Vector2<float> GetMousePos()
+    static Vector2<float> GetMousePos(bool fenced = false)
     {
-        return Vector2<float>(_mouseX, _mouseY);
+        if (fenced)
+        {
+            return Vector2<float>(_mouseX_fenced, _mouseY_fenced);
+        }
+        else
+        {
+            return Vector2<float>(_mouseX, _mouseY);
+        }
     }
-    static Vector2<float> GetMouseWorldPos(ENG_Camera *camera)
+    static Vector2<float> GetMouseWorldPos(ENG_Camera *camera, bool fenced = false)
     {
-        //        Vector2<float> out(_mouseX, _mouseY);
-        //
-        //        out.x -= camera->window->center.x;
-        //        out.y -= camera->window->center.y;
-        //
-        //        out.y *= -1;
-        //
-        //        out.Rotate(camera->angle);
-        //
-        //        out /= camera->zoom;
-        //
-        //        out.x += camera->position.x;
-        //        out.y += camera->position.y;
-        //
-        //        return out;
-
         float globalX;
         float globalY;
         SDL_GetGlobalMouseState(&globalX, &globalY);
@@ -220,6 +215,9 @@ public:
 
         out.x += camera->position.x;
         out.y += camera->position.y;
+
+        //out.x = SDL_clamp(out.x, camera->window->size.x / -2, camera->window->size.x / 2);
+        //out.y = SDL_clamp(out.y, camera->window->size.y / -2, camera->window->size.y / 2);
 
         return out;
     }

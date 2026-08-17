@@ -38,14 +38,15 @@ public:
         v.erase(std::remove(v.begin(), v.end(), this), v.end());
     }
 
-    ENG_Camera *camera;
-    ENG_Texture *texture;
+    ENG_Camera *camera = nullptr;
+    ENG_Texture *texture = nullptr;
     Vector2<double> position = {0, 0};
     Vector2<double> velocity = {0, 0};
     double rotation = 0;
     double size = 1;
     Vector2<double> scale = {1, 1};
-    ENG_Timer *timer;
+    ENG_Timer *timer = nullptr;
+    bool active = true;
 
     void AssignTexture(ENG_Texture *new_texture)
     {
@@ -62,7 +63,15 @@ public:
 
     void Update()
     {
-        position += velocity * timer->delta;
+        if (timer == nullptr)
+        {
+            position += velocity;
+        }
+        else
+        {
+            position += velocity * timer->delta;
+        }
+
         if (texture != NULL && camera != NULL)
         {
             ENG_DrawTools::DrawTexture(camera, texture, position, size, rotation);
@@ -73,7 +82,10 @@ public:
     {
         for (ENG_Dingus *d : instances())
         {
-            d->Update();
+            if (d->active)
+            {
+                d->Update();
+            }
         }
     }
 };

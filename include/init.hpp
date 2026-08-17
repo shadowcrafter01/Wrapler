@@ -40,7 +40,7 @@ struct JSON
 
 struct DINGUS
 {
-    inline static ENG_Dingus test = ENG::CreateDingus(&CAM::primary, &TEX::billGates);
+    //inline static ENG_Dingus test = ENG::CreateDingus(&CAM::primary, &TEX::billGates);
 };
 
 
