@@ -17,6 +17,7 @@ public:
     double zoom;
     double angle;
     ENG_Window *window;
+    
 };
 
 #endif

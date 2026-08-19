@@ -5,17 +5,25 @@
 
 #include "game.hpp"
 
+#include <random>
+std::random_device dev;
+std::mt19937 rng(dev());
+std::uniform_int_distribution<std::mt19937::result_type> dist(0, 500);
+
+GameObject test;
+
 void onMouseUpR()
 {
     // AUD::boom.Play();
-    //DINGUS::test.active = false;
+    // DINGUS::test.active = false;
 }
 void onMouseDownL()
 {
     PROCESS_MEMORY_COUNTERS pmc;
     GetProcessMemoryInfo(GetCurrentProcess(), &pmc, sizeof(pmc));
-    ENG::console.LogDebug(pmc.WorkingSetSize / 1024);
-    //DINGUS::test.active = true;
+    //ENG::console.LogDebug(pmc.WorkingSetSize / 1024);
+    ENG::console.LogDebug(ENG::timer.FPS);
+    // DINGUS::test.active = true;
 }
 
 int main(int argc, char *argv[])
@@ -41,25 +49,24 @@ int main(int argc, char *argv[])
     JSON::test.readProperty("average_fps", &averageFPS_old, 0.0);
     JSON::test.readProperty("average_fps_best", &averageFPS_best, 0.0);
 
-    GameObject test;
-    //test.AssignCamera(&CAM::primary);
-    //test.AssignTexture(&TEX::billGates);
+    test.AssignCamera(&CAM::primary);
+    test.AssignTexture(&TEX::billGates);
     test.AssignTimer(&ENG::timer);
-
+    test.damping = 0.5;
+    test.fenceToWindow = true;
 
     while (ENG::Update())
     {
         averageFPS = (0.9 * averageFPS) + ((1 - 0.9) * ENG::timer.FPS);
         controls();
 
-        //DINGUS::test.velocity += ((ENG::input.GetMouseWorldPos(&CAM::primary, true) - DINGUS::test.position).Scale(2, true) + DINGUS::test.velocity.Scale(-0.5, true)).Scale(ENG::timer.delta, true);
-        test.velocity += ((ENG::input.GetMouseWorldPos(&CAM::primary, true) - test.position).Scale(10, true) + test.velocity.Scale(-0.75, true)).Scale(ENG::timer.delta, true);
+        test.ApplyForce((ENG::input.GetMouseWorldPos(&CAM::primary, true) - test.position).Scale(1, true));
+        //test.ApplyForce(test.velocity.Scale(-0.5, true));
 
-        ENG::draw.DrawTexture(&CAM::primary,&TEX::billGates,test.position);
 
         if (ENG::input.keyState(SDL_SCANCODE_SPACE))
         {
-            SDL_Delay(100);
+            SDL_Delay(dist(rng));
         }
 
         // for (int i = 0; i <= 100; i++)

@@ -18,6 +18,18 @@ private:
         return v;
     }
 
+    Vector2<double> forceSum = {0, 0};
+
+    void PropagatePhysics()
+    {
+        forceSum += velocity.Scale(-damping, true);
+
+        velocity += (forceSum / mass) * timer->delta * 0.5;
+        position += velocity * timer->delta;
+        velocity += (forceSum / mass) * timer->delta * 0.5;
+        forceSum = Vector2<double>(0, 0);
+    }
+
 public:
     ENG_Dingus()
     {
@@ -47,6 +59,10 @@ public:
     Vector2<double> scale = {1, 1};
     ENG_Timer *timer = nullptr;
     bool active = true;
+    bool physicsEnabled = true;
+    double mass = 1;
+    double damping = 0;
+    bool fenceToWindow = false;
 
     void AssignTexture(ENG_Texture *new_texture)
     {
@@ -61,20 +77,27 @@ public:
         timer = new_timer;
     }
 
+    void ApplyForce(Vector2<double> force)
+    {
+        forceSum += force; // * timer->delta;
+    }
+
     void Update()
     {
-        if (timer == nullptr)
+        if (physicsEnabled && timer != nullptr)
         {
-            position += velocity;
-        }
-        else
-        {
-            position += velocity * timer->delta;
+            PropagatePhysics();
         }
 
-        if (texture != NULL && camera != NULL)
+        if (texture != NULL && camera != nullptr)
         {
             ENG_DrawTools::DrawTexture(camera, texture, position, size, rotation);
+        }
+
+        if (fenceToWindow && camera != nullptr)
+        {
+            position.x = SDL_clamp(position.x, camera->window->size.x / -2, camera->window->size.x / 2);
+            position.y = SDL_clamp(position.y, camera->window->size.y / -2, camera->window->size.y / 2);
         }
     }
 
