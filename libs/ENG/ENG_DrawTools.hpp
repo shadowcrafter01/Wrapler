@@ -101,7 +101,7 @@ public:
         SDL_RenderLine(camera->window->renderer, from.x, from.y, to.x, to.y);
     }
 
-    void DrawShape(ENG_Camera *camera, Vector2<double> corner1, Vector2<double> corner2, Vector2<double> corner3, colorRGBA color = colorRGBA(255, 255, 255, 255))
+    void DrawTri(ENG_Camera *camera, Vector2<double> corner1, Vector2<double> corner2, Vector2<double> corner3, colorRGBA color = colorRGBA(255, 255, 255, 255))
     {
 
         corner1 = projectToCamera(camera, corner1);

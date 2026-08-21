@@ -61,7 +61,7 @@ int main(int argc, char *argv[])
         //test.ApplyForce(test.velocity.Scale(-0.5, true));
 
         //ENG::draw.DrawLine(&CAM::primary,{0,0},ENG::input.GetMouseWorldPos(&CAM::primary));
-        ENG::draw.DrawShape(&CAM::primary,{-100,-100},{100,-100},ENG::input.GetMouseWorldPos(&CAM::primary),colorRGBA(128,10,200,255));
+        ENG::draw.DrawTri(&CAM::primary,{-100,-100},{100,-100},ENG::input.GetMouseWorldPos(&CAM::primary),colorRGBA(128,10,200,255));
 
         if (ENG::input.keyState(SDL_SCANCODE_SPACE))
         {
