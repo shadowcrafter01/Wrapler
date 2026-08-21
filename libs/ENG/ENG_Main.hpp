@@ -30,7 +30,7 @@ public:
     {
     }
 
-    inline static bool Init(const char *appname, const char *appversion, const char *appidentifier)
+    inline static bool Init(const char *appname = "c++ project", const char *appversion = "0.0.0", const char *appidentifier = "com.name.engine")
     {
         bool flag = false;
         console.LogLoadStart("Initializing engine");

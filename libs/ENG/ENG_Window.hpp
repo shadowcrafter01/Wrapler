@@ -87,8 +87,9 @@ public:
     }
     void Update()
     {
+        SDL_SetRenderTarget(renderer, NULL);
         SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
-        SDL_SetRenderScale(renderer,1,1);
+        SDL_SetRenderScale(renderer, 1, 1);
         SDL_GetWindowSizeInPixels(pointer, &size.x, &size.y);
         center = Vector2<int>(size.x / 2, size.y / 2);
         SDL_RenderPresent(renderer);

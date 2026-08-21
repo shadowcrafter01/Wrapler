@@ -100,6 +100,37 @@ public:
         SDL_SetRenderDrawColor(camera->window->renderer, color.red, color.green, color.blue, color.alpha);
         SDL_RenderLine(camera->window->renderer, from.x, from.y, to.x, to.y);
     }
+
+    void DrawShape(ENG_Camera *camera, Vector2<double> corner1, Vector2<double> corner2, Vector2<double> corner3, colorRGBA color = colorRGBA(255, 255, 255, 255))
+    {
+
+        corner1 = projectToCamera(camera, corner1);
+        corner2 = projectToCamera(camera, corner2);
+        corner3 = projectToCamera(camera, corner3);
+
+        SDL_Vertex vertices[4];
+        SDL_zeroa(vertices);
+        vertices[0].position.x = corner1.x;
+        vertices[0].position.y = corner1.y;
+        vertices[0].color.r = color.red / 255.0f;
+        vertices[0].color.g = color.green / 255.0f;
+        vertices[0].color.b = color.blue / 255.0f;
+        vertices[0].color.a = color.alpha / 255.0f;
+        vertices[1].position.x = corner2.x;
+        vertices[1].position.y = corner2.y;
+        vertices[1].color.r = color.red / 255.0f;
+        vertices[1].color.g = color.green / 255.0f;
+        vertices[1].color.b = color.blue / 255.0f;
+        vertices[1].color.a = color.alpha / 255.0f;
+        vertices[2].position.x = corner3.x;
+        vertices[2].position.y = corner3.y;
+        vertices[2].color.r = color.red / 255.0f;
+        vertices[2].color.g = color.green / 255.0f;
+        vertices[2].color.b = color.blue / 255.0f;
+        vertices[2].color.a = color.alpha / 255.0f;
+
+        SDL_RenderGeometry(camera->window->renderer, NULL, vertices, 3, NULL, 0);
+    }
 };
 
 #endif
