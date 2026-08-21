@@ -10,20 +10,17 @@ std::random_device dev;
 std::mt19937 rng(dev());
 std::uniform_int_distribution<std::mt19937::result_type> dist(0, 500);
 
-GameObject test;
+//GameObject test;
 
 void onMouseUpR()
 {
     // AUD::boom.Play();
-    // DINGUS::test.active = false;
 }
 void onMouseDownL()
 {
     PROCESS_MEMORY_COUNTERS pmc;
     GetProcessMemoryInfo(GetCurrentProcess(), &pmc, sizeof(pmc));
-    //ENG::console.LogDebug(pmc.WorkingSetSize / 1024);
-    ENG::console.LogDebug(ENG::timer.FPS);
-    // DINGUS::test.active = true;
+    ENG::console.LogDebug(pmc.WorkingSetSize / 1024);
 }
 
 int main(int argc, char *argv[])
@@ -49,40 +46,27 @@ int main(int argc, char *argv[])
     JSON::test.readProperty("average_fps", &averageFPS_old, 0.0);
     JSON::test.readProperty("average_fps_best", &averageFPS_best, 0.0);
 
-    test.AssignCamera(&CAM::primary);
-    test.AssignTexture(&TEX::billGates);
-    test.AssignTimer(&ENG::timer);
-    test.damping = 0.5;
-    test.fenceToWindow = true;
+    //test.AssignCamera(&CAM::primary);
+    //test.AssignTexture(&TEX::billGates);
+    //test.AssignTimer(&ENG::timer);
+    //test.damping = 0.5;
+    //test.fenceToWindow = true;
 
     while (ENG::Update())
     {
         averageFPS = (0.9 * averageFPS) + ((1 - 0.9) * ENG::timer.FPS);
         controls();
 
-        test.ApplyForce((ENG::input.GetMouseWorldPos(&CAM::primary, true) - test.position).Scale(1, true));
+        //test.ApplyForce((ENG::input.GetMouseWorldPos(&CAM::primary, true) - test.position).Scale(1, true));
         //test.ApplyForce(test.velocity.Scale(-0.5, true));
 
+        ENG::draw.DrawLine(&CAM::primary,{0,0},ENG::input.GetMouseWorldPos(&CAM::primary));
 
         if (ENG::input.keyState(SDL_SCANCODE_SPACE))
         {
             SDL_Delay(dist(rng));
         }
-
-        // for (int i = 0; i <= 100; i++)
-        //{
-        //     for (int j = 0; j <= 100; j++)
-        //     {
-        //         ENG::draw.DrawTexture(&CAM::primary, &TEX::billGates, Vector2(i * 100, j * 100), 1, ENG::timer.now_s() * 60);
-        //     }
-        //     ENG::draw.DrawFont(&CAM::primary, &FNT::cu, "test", Vector2(i * 100, -100));
-        // }
-        // ENG::draw.DrawTexture(&CAM::primary, &TEX::billGates, ENG::input.GetMouseWorldPos(&CAM::primary), 0.5);
-        // ENG::draw.DrawTexture(&CAM::test, &TEX::test, ENG::input.GetMouseWorldPos(&CAM::test), 0.5);
-        // ENG::draw.DrawFont(&CAM::test, &FNT::cu, std::to_string(ENG::draw.textureDrawCount), WIN::test.size * Vector2(-0.5, 0.5));
-        // ENG::draw.DrawFont(&CAM::test, &FNT::cu, std::to_string(averageFPS), (WIN::test.size * Vector2(-0.5, 0.5)) + Vector2(0, -20));
-        // ENG::draw.DrawFont(&CAM::test, &FNT::cu, std::to_string(averageFPS_old), (WIN::test.size * Vector2(-0.5, 0.5)) + Vector2(0, -40));
-        // ENG::draw.DrawFont(&CAM::test, &FNT::cu, std::to_string(averageFPS_best), (WIN::test.size * Vector2(-0.5, 0.5)) + Vector2(0, -60));
+        SDL_Delay(20);
     }
 
     JSON::test.writeProperty<double>("average_fps", averageFPS);

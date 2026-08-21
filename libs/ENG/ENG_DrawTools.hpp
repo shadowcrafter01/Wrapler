@@ -92,6 +92,14 @@ public:
         SDL_DestroyTexture(texture);
     }
     inline static int textureDrawCount = 0;
+
+    void DrawLine(ENG_Camera *camera, Vector2<double> from, Vector2<double> to, colorRGBA color = colorRGBA(255, 255, 255, 255))
+    {
+        from = projectToCamera(camera, from);
+        to = projectToCamera(camera, to);
+        SDL_SetRenderDrawColor(camera->window->renderer, color.red, color.green, color.blue, color.alpha);
+        SDL_RenderLine(camera->window->renderer, from.x, from.y, to.x, to.y);
+    }
 };
 
 #endif
