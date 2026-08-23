@@ -8,7 +8,7 @@
 #include <random>
 std::random_device dev;
 std::mt19937 rng(dev());
-std::uniform_int_distribution<std::mt19937::result_type> dist(0, 500);
+std::uniform_int_distribution<std::mt19937::result_type> dist(0, 100);
 
 //GameObject test;
 
@@ -55,19 +55,19 @@ int main(int argc, char *argv[])
     while (ENG::Update())
     {
         averageFPS = (0.9 * averageFPS) + ((1 - 0.9) * ENG::timer.FPS);
+        mainTick();
         controls();
 
         //test.ApplyForce((ENG::input.GetMouseWorldPos(&CAM::primary, true) - test.position).Scale(1, true));
         //test.ApplyForce(test.velocity.Scale(-0.5, true));
 
-        //ENG::draw.DrawLine(&CAM::primary,{0,0},ENG::input.GetMouseWorldPos(&CAM::primary));
-        ENG::draw.DrawTri(&CAM::primary,{-100,-100},{100,-100},ENG::input.GetMouseWorldPos(&CAM::primary),colorRGBA(128,10,200,255));
+        ENG::draw.DrawLine(&CAM::primary,{0,0},ENG::input.GetMouseWorldPos(&CAM::primary));
+        //ENG::draw.DrawTri(&CAM::primary,{-100,-100},{100,-100},ENG::input.GetMouseWorldPos(&CAM::primary),colorRGBA(128,10,200,255));
 
         if (ENG::input.keyState(SDL_SCANCODE_SPACE))
         {
             SDL_Delay(dist(rng));
         }
-        SDL_Delay(20);
     }
 
     JSON::test.writeProperty<double>("average_fps", averageFPS);

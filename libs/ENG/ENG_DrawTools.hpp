@@ -93,7 +93,7 @@ public:
     }
     inline static int textureDrawCount = 0;
 
-    void DrawLine(ENG_Camera *camera, Vector2<double> from, Vector2<double> to, colorRGBA color = colorRGBA(255, 255, 255, 255))
+    inline static void DrawLine(ENG_Camera *camera, Vector2<double> from, Vector2<double> to, colorRGBA color = colorRGBA(255, 255, 255, 255))
     {
         from = projectToCamera(camera, from);
         to = projectToCamera(camera, to);
@@ -101,15 +101,15 @@ public:
         SDL_RenderLine(camera->window->renderer, from.x, from.y, to.x, to.y);
     }
 
-    void DrawTri(ENG_Camera *camera, Vector2<double> corner1, Vector2<double> corner2, Vector2<double> corner3, colorRGBA color = colorRGBA(255, 255, 255, 255))
+    inline static void DrawTri(ENG_Camera *camera, Vector2<double> corner1, Vector2<double> corner2, Vector2<double> corner3, colorRGBA color = colorRGBA(255, 255, 255, 255))
     {
 
         corner1 = projectToCamera(camera, corner1);
         corner2 = projectToCamera(camera, corner2);
         corner3 = projectToCamera(camera, corner3);
 
-        SDL_Vertex vertices[4];
-        SDL_zeroa(vertices);
+        SDL_Vertex vertices[3];
+        // SDL_zeroa(vertices);
         vertices[0].position.x = corner1.x;
         vertices[0].position.y = corner1.y;
         vertices[0].color.r = color.red / 255.0f;
@@ -131,6 +131,8 @@ public:
 
         SDL_RenderGeometry(camera->window->renderer, NULL, vertices, 3, NULL, 0);
     }
+
+
 };
 
 #endif
