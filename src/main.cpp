@@ -8,7 +8,7 @@
 #include <random>
 std::random_device dev;
 std::mt19937 rng(dev());
-std::uniform_int_distribution<std::mt19937::result_type> dist(0, 500);
+std::uniform_int_distribution<std::mt19937::result_type> dist(0, 100);
 
 //GameObject test;
 
@@ -57,6 +57,7 @@ int main(int argc, char *argv[])
     while (ENG::Update())
     {
         averageFPS = (0.9 * averageFPS) + ((1 - 0.9) * ENG::timer.FPS);
+        mainTick();
         controls();
 
         //test.ApplyForce((ENG::input.GetMouseWorldPos(&CAM::primary, true) - test.position).Scale(1, true));
@@ -76,7 +77,6 @@ int main(int argc, char *argv[])
         {
             SDL_Delay(dist(rng));
         }
-        SDL_Delay(20);
     }
 
     JSON::test.writeProperty<double>("average_fps", averageFPS);

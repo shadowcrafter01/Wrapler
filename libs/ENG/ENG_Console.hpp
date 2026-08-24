@@ -60,7 +60,7 @@ public:
         std::cout << reportCurrentMS() << " -WARN : " << message << "\n";
     }
 
-    static void LogError(std::string message, std::string error = SDL_GetError())
+    static void LogError(std::string message = "", std::string error = SDL_GetError())
     {
         std::cout << reportCurrentMS() << " -ERROR: " << message << " -> " << error << "\n";
     }

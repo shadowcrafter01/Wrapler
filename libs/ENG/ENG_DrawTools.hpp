@@ -108,8 +108,8 @@ public:
         corner2 = projectToCamera(camera, corner2);
         corner3 = projectToCamera(camera, corner3);
 
-        SDL_Vertex vertices[4];
-        SDL_zeroa(vertices);
+        SDL_Vertex vertices[3];
+        // SDL_zeroa(vertices);
         vertices[0].position.x = corner1.x;
         vertices[0].position.y = corner1.y;
         vertices[0].color.r = color.red / 255.0f;
@@ -131,6 +131,8 @@ public:
 
         SDL_RenderGeometry(camera->window->renderer, NULL, vertices, 3, NULL, 0);
     }
+
+
 };
 
 #endif

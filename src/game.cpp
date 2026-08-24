@@ -1,37 +1,38 @@
 #include "init.hpp"
+#include "math.h"
+
 
 void mainTick()
 {
-
 
 }
 
 void controls()
 {
-    //if (ENG::input.GetMouseState(SDL_BUTTON_LEFT))
+    // if (ENG::input.GetMouseState(SDL_BUTTON_LEFT))
     //{
-    //    ENG::console.LogInfo("ooga booga");
-    //}
+    //     ENG::console.LogInfo("ooga booga");
+    // }
 
     if (ENG::input.keyState(SDL_SCANCODE_W))
     {
-        //CAM::primary.position.y += 100 / CAM::primary.zoom * ENG::timer.delta;
-        CAM::primary.position += Vector2<double>(0,200).Rotate(CAM::primary.angle) / CAM::primary.zoom * ENG::timer.delta;
+        // CAM::primary.position.y += 100 / CAM::primary.zoom * ENG::timer.delta;
+        CAM::primary.position += Vector2<double>(0, 200).Rotate(CAM::primary.angle) / CAM::primary.zoom * ENG::timer.delta;
     }
     if (ENG::input.keyState(SDL_SCANCODE_A))
     {
-        //CAM::primary.position.x -= 100 / CAM::primary.zoom * ENG::timer.delta;
-        CAM::primary.position += Vector2<double>(-200,0).Rotate(CAM::primary.angle) / CAM::primary.zoom * ENG::timer.delta;
+        // CAM::primary.position.x -= 100 / CAM::primary.zoom * ENG::timer.delta;
+        CAM::primary.position += Vector2<double>(-200, 0).Rotate(CAM::primary.angle) / CAM::primary.zoom * ENG::timer.delta;
     }
     if (ENG::input.keyState(SDL_SCANCODE_S))
     {
-        //CAM::primary.position.y -= 100 / CAM::primary.zoom * ENG::timer.delta;
-        CAM::primary.position += Vector2<double>(0,-200).Rotate(CAM::primary.angle) / CAM::primary.zoom * ENG::timer.delta;
+        // CAM::primary.position.y -= 100 / CAM::primary.zoom * ENG::timer.delta;
+        CAM::primary.position += Vector2<double>(0, -200).Rotate(CAM::primary.angle) / CAM::primary.zoom * ENG::timer.delta;
     }
     if (ENG::input.keyState(SDL_SCANCODE_D))
     {
-        //CAM::primary.position.x += 100 / CAM::primary.zoom * ENG::timer.delta;
-        CAM::primary.position += Vector2<double>(200,0).Rotate(CAM::primary.angle) / CAM::primary.zoom * ENG::timer.delta;
+        // CAM::primary.position.x += 100 / CAM::primary.zoom * ENG::timer.delta;
+        CAM::primary.position += Vector2<double>(200, 0).Rotate(CAM::primary.angle) / CAM::primary.zoom * ENG::timer.delta;
     }
     if (ENG::input.keyState(SDL_SCANCODE_UP))
     {
