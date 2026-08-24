@@ -52,6 +52,8 @@ int main(int argc, char *argv[])
     //test.damping = 0.5;
     //test.fenceToWindow = true;
 
+    ENG_Pen testPen = ENG_Pen(&CAM::primary);
+
     while (ENG::Update())
     {
         averageFPS = (0.9 * averageFPS) + ((1 - 0.9) * ENG::timer.FPS);
@@ -61,7 +63,14 @@ int main(int argc, char *argv[])
         //test.ApplyForce(test.velocity.Scale(-0.5, true));
 
         //ENG::draw.DrawLine(&CAM::primary,{0,0},ENG::input.GetMouseWorldPos(&CAM::primary));
-        ENG::draw.DrawTri(&CAM::primary,{-100,-100},{100,-100},ENG::input.GetMouseWorldPos(&CAM::primary),colorRGBA(128,10,200,255));
+        //ENG::draw.DrawTri(&CAM::primary,{-100,-100},{100,-100},ENG::input.GetMouseWorldPos(&CAM::primary),colorRGBA(128,10,200,255));
+
+        testPen.GoTo({0,0});
+        testPen.Down();
+        testPen.GoTo({100,100});
+        testPen.GoTo(ENG::input.GetMouseWorldPos(&CAM::primary));
+        testPen.GoTo({-100,0});
+        testPen.Up();
 
         if (ENG::input.keyState(SDL_SCANCODE_SPACE))
         {

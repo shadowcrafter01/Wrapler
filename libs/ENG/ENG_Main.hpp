@@ -20,6 +20,7 @@
 #include "ENG_Camera.hpp"
 #include "ENG_File.hpp"
 #include "ENG_DrawTools.hpp"
+#include "ENG_Pen.hpp"
 #include "ENG_Dingus.hpp"
 
 class ENG
