@@ -40,8 +40,6 @@ public:
     }
 
     SDL_Renderer *renderer;
-    int width;
-    int height;
     const char *path;
     SDL_Texture *pointer;
     SDL_Surface *surface;
