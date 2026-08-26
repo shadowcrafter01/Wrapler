@@ -10,7 +10,7 @@ std::random_device dev;
 std::mt19937 rng(dev());
 std::uniform_int_distribution<std::mt19937::result_type> dist(0, 100);
 
-//GameObject test;
+// GameObject test;
 
 void onMouseUpR()
 {
@@ -46,36 +46,42 @@ int main(int argc, char *argv[])
     JSON::test.readProperty("average_fps", &averageFPS_old, 0.0);
     JSON::test.readProperty("average_fps_best", &averageFPS_best, 0.0);
 
-    //test.AssignCamera(&CAM::primary);
-    //test.AssignTexture(&TEX::billGates);
-    //test.AssignTimer(&ENG::timer);
-    //test.damping = 0.5;
-    //test.fenceToWindow = true;
+    // test.AssignCamera(&CAM::primary);
+    // test.AssignTexture(&TEX::billGates);
+    // test.AssignTimer(&ENG::timer);
+    // test.damping = 0.5;
+    // test.fenceToWindow = true;
 
     ENG_Pen testPen = ENG_Pen(&CAM::primary);
 
+    Vector2<float> temp = Vector2(0.0f,0.0f);
+
     while (ENG::Update())
     {
-        averageFPS = (0.9 * averageFPS) + ((1 - 0.9) * ENG::timer.FPS);
+        averageFPS = ENG_Math::Lerp(averageFPS, ENG::timer.FPS, 0.1);
         mainTick();
         controls();
 
-        //test.ApplyForce((ENG::input.GetMouseWorldPos(&CAM::primary, true) - test.position).Scale(1, true));
-        //test.ApplyForce(test.velocity.Scale(-0.5, true));
+        temp = ENG_Math::Lerp(temp,ENG::input.GetMousePos(&CAM::primary),0.5);
+        
+        ENG::console.LogInfo(temp);
 
-        //ENG::draw.DrawLine(&CAM::primary,{0,0},ENG::input.GetMouseWorldPos(&CAM::primary));
-        //ENG::draw.DrawTri(&CAM::primary,{-100,-100},{100,-100},ENG::input.GetMouseWorldPos(&CAM::primary),colorRGBA(128,10,200,255));
+        // test.ApplyForce((ENG::input.GetMouseWorldPos(&CAM::primary, true) - test.position).Scale(1, true));
+        // test.ApplyForce(test.velocity.Scale(-0.5, true));
 
-        testPen.GoTo({0,0});
-        testPen.Down();
-        testPen.GoTo({100,100});
-        testPen.GoTo(ENG::input.GetMouseWorldPos(&CAM::primary));
-        testPen.GoTo({-100,0});
-        testPen.Up();
+        // ENG::draw.DrawLine(&CAM::primary,{0,0},ENG::input.GetMouseWorldPos(&CAM::primary));
+        // ENG::draw.DrawTri(&CAM::primary,{-100,-100},{100,-100},ENG::input.GetMouseWorldPos(&CAM::primary),colorRGBA(128,10,200,255));
+
+        // testPen.GoTo({0,0});
+        // testPen.Down();
+        // testPen.GoTo({100,100});
+        // testPen.GoTo(ENG::input.GetMouseWorldPos(&CAM::primary));
+        // testPen.GoTo({-100,0});
+        // testPen.Up();
 
         if (ENG::input.keyState(SDL_SCANCODE_SPACE))
         {
-            SDL_Delay(dist(rng));
+            SDL_Delay(100);//(dist(rng));
         }
     }
 

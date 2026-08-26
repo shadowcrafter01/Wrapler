@@ -22,6 +22,7 @@
 #include "ENG_DrawTools.hpp"
 #include "ENG_Pen.hpp"
 #include "ENG_Dingus.hpp"
+#include "ENG_Math.hpp"
 
 class ENG
 {
