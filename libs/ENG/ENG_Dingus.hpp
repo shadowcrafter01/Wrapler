@@ -8,45 +8,61 @@
 #include "ENG_Timer.hpp"
 #include "Vector2.hpp"
 #include <vector>
+#include "ENG_CollisionShape.hpp"
+#include <functional>
+#include "Stopwatch.hpp"
+#include "RunOnce.hpp"
 
 class ENG_Dingus
 {
 private:
-    static std::vector<ENG_Dingus *> &instances()
+    static std::vector<ENG_Dingus *> &_instances()
     {
         static std::vector<ENG_Dingus *> v;
         return v;
     }
 
-    Vector2<double> forceSum = {0, 0};
+    Vector2<double> _forceSum = {0, 0};
 
-    void PropagatePhysics()
+    void _PropagatePhysics()
     {
-        forceSum += velocity.Scale(-damping, true);
+        _forceSum += velocity.Scale(-damping, true);
 
-        velocity += (forceSum / mass) * timer->delta * 0.5;
+        velocity += (_forceSum / mass) * timer->delta * 0.5;
         position += velocity * timer->delta;
-        velocity += (forceSum / mass) * timer->delta * 0.5;
-        forceSum = Vector2<double>(0, 0);
+        velocity += (_forceSum / mass) * timer->delta * 0.5;
+        _forceSum = Vector2<double>(0, 0);
     }
+
+    void _OnClick()
+    {
+    }
+
+    RunOnce _mouseDownRunner_R;
+    RunOnce _mouseDownRunner_L;
+    RunOnce _mouseDownRunner_M;
+    RunOnce _mouseHoverRunner;
+    RunOnce _mouseUpRunner_R;
+    RunOnce _mouseUpRunner_L;
+    RunOnce _mouseUpRunner_M;
 
 public:
     ENG_Dingus()
     {
-        instances().push_back(this);
+        _instances().push_back(this);
     }
     ENG_Dingus(ENG_Camera *camera) : camera{camera}
     {
-        instances().push_back(this);
+        _instances().push_back(this);
     }
     ENG_Dingus(ENG_Camera *camera, ENG_Texture *texture) : camera{camera},
                                                            texture{texture}
     {
-        instances().push_back(this);
+        _instances().push_back(this);
     }
     ~ENG_Dingus()
     {
-        std::vector<ENG_Dingus *> &v = instances();
+        std::vector<ENG_Dingus *> &v = _instances();
         v.erase(std::remove(v.begin(), v.end(), this), v.end());
     }
 
@@ -63,7 +79,15 @@ public:
     double mass = 1;
     double damping = 0;
     bool fenceToWindow = false;
+    bool collisionEnabled = false;
+    int collisionLayer;
+    int renderLayer;
+    ENG_CollisionShape *collisionShape = nullptr;
 
+    void AssignCollisionShape(ENG_CollisionShape *shape)
+    {
+        collisionShape = shape;
+    }
     void AssignTexture(ENG_Texture *new_texture)
     {
         texture = new_texture;
@@ -76,17 +100,33 @@ public:
     {
         timer = new_timer;
     }
+    void AssignClickEvent_R(std::function<void()> f)
+    {
+        _mouseDownRunner_R.AssignFunction(f);
+    }
+    void AssignClickEvent_L(std::function<void()> f)
+    {
+        _mouseDownRunner_L.AssignFunction(f);
+    }
+    void AssignClickEvent_M(std::function<void()> f)
+    {
+        _mouseDownRunner_M.AssignFunction(f);
+    }
+    void AssignHoverEvent(std::function<void()> f)
+    {
+        _mouseHoverRunner.AssignFunction(f);
+    }
 
     void ApplyForce(Vector2<double> force)
     {
-        forceSum += force; // * timer->delta;
+        _forceSum += force; // * timer->delta;
     }
 
     void Update()
     {
         if (physicsEnabled && timer != nullptr)
         {
-            PropagatePhysics();
+            _PropagatePhysics();
         }
 
         if (texture != NULL && camera != nullptr)
@@ -99,11 +139,34 @@ public:
             position.x = SDL_clamp(position.x, camera->window->size.x / -2, camera->window->size.x / 2);
             position.y = SDL_clamp(position.y, camera->window->size.y / -2, camera->window->size.y / 2);
         }
+
+        if (camera != nullptr && collisionShape != nullptr && collisionShape->IfOverlapping(ENG_Input::GetMouseWorldPos(camera)))
+        {
+            // hover event
+            _mouseHoverRunner.OnTrue(collisionShape->IfOverlapping(ENG_Input::GetMouseWorldPos(camera)));
+            // click
+            _mouseDownRunner_R.OnTrue(ENG_Input::Right);
+            _mouseDownRunner_L.OnTrue(ENG_Input::Left);
+            _mouseDownRunner_M.OnTrue(ENG_Input::Middle);
+
+            _mouseUpRunner_R.OnFalse(ENG_Input::Right);
+            _mouseUpRunner_L.OnFalse(ENG_Input::Left);
+            _mouseUpRunner_M.OnFalse(ENG_Input::Middle);
+        }
+    }
+
+    double GetDistanceToMouse()
+    {
+        if (camera == nullptr)
+        {
+            return -1;
+        }
+        return Vector2<double>::Distance(position, ENG_Input::GetMousePos(camera));
     }
 
     inline static void UpdateAll()
     {
-        for (ENG_Dingus *d : instances())
+        for (ENG_Dingus *d : _instances())
         {
             if (d->active)
             {

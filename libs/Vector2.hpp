@@ -51,6 +51,13 @@ public:
         return Vector2<T>(_x, _y);
     }
 
+    inline static T Distance(Vector2<T> vec1, Vector2<T> vec2)
+    {
+        T xDiff = vec1.x - vec2.x;
+        T yDiff = vec1.y - vec2.y;
+        return sqrt((xDiff * xDiff) + (yDiff * yDiff));
+    }
+
     template <class U>
     Vector2<T> operator+(const Vector2<U> &r)
     {

@@ -21,6 +21,7 @@
 #include "ENG_File.hpp"
 #include "ENG_DrawTools.hpp"
 #include "ENG_Pen.hpp"
+#include "ENG_CollisionShape.hpp"
 #include "ENG_Dingus.hpp"
 #include "ENG_Math.hpp"
 

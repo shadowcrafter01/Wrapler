@@ -10,7 +10,7 @@ std::random_device dev;
 std::mt19937 rng(dev());
 std::uniform_int_distribution<std::mt19937::result_type> dist(0, 100);
 
-// GameObject test;
+GameObject test;
 
 void onMouseUpR()
 {
@@ -23,6 +23,7 @@ void onMouseDownL()
     ENG::console.LogDebug(pmc.WorkingSetSize / 1024);
 }
 
+
 int main(int argc, char *argv[])
 {
     ENG::Init("Wrapler", "0.0", "com.wrapler.engine");
@@ -32,8 +33,8 @@ int main(int argc, char *argv[])
     ENG::console.LogInfo("test");
     ENG::console.LogDebug(ENG::timer.now_ns());
 
-    ENG::input.RegisterMouseUp_R(onMouseUpR);
-    ENG::input.RegisterMouseDown_L(onMouseDownL);
+    //ENG::input.RegisterMouseUp_R(onMouseUpR);
+    //ENG::input.RegisterMouseDown_L(onMouseDownL);
 
     float test_number;
     bool test_bool;
@@ -46,15 +47,22 @@ int main(int argc, char *argv[])
     JSON::test.readProperty("average_fps", &averageFPS_old, 0.0);
     JSON::test.readProperty("average_fps_best", &averageFPS_best, 0.0);
 
-    // test.AssignCamera(&CAM::primary);
-    // test.AssignTexture(&TEX::billGates);
-    // test.AssignTimer(&ENG::timer);
-    // test.damping = 0.5;
-    // test.fenceToWindow = true;
+    test.AssignCamera(&CAM::primary);
+    test.AssignTexture(&TEX::test);
+    test.AssignTimer(&ENG::timer);
+    test.damping = 0.5;
+    test.fenceToWindow = true;
+    test.AssignClickEvent_L(&onMouseDownL);
+
+    ENG_CollisionShape tempShape;
+    tempShape.radius = 20;
+    test.AssignCollisionShape(&tempShape);
+
+    //ENG_CollisionShape temp;
+    //test.collisionShape = &temp;
 
     ENG_Pen testPen = ENG_Pen(&CAM::primary);
 
-    Vector2<float> temp = Vector2(0.0f,0.0f);
 
     while (ENG::Update())
     {
@@ -62,12 +70,8 @@ int main(int argc, char *argv[])
         mainTick();
         controls();
 
-        temp = ENG_Math::Lerp(temp,ENG::input.GetMousePos(&CAM::primary),0.5);
-        
-        ENG::console.LogInfo(temp);
 
-        // test.ApplyForce((ENG::input.GetMouseWorldPos(&CAM::primary, true) - test.position).Scale(1, true));
-        // test.ApplyForce(test.velocity.Scale(-0.5, true));
+        //test.ApplyForce((ENG::input.GetMouseWorldPos(&CAM::primary, true) - test.position).Scale(1, true));
 
         // ENG::draw.DrawLine(&CAM::primary,{0,0},ENG::input.GetMouseWorldPos(&CAM::primary));
         // ENG::draw.DrawTri(&CAM::primary,{-100,-100},{100,-100},ENG::input.GetMouseWorldPos(&CAM::primary),colorRGBA(128,10,200,255));

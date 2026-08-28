@@ -18,7 +18,7 @@ private:
     inline static std::unordered_set<SDL_Scancode> _keysReleased;
 
     // mouse state
-    inline static std::unordered_set<Uint8> _mouseButtons;
+    //inline static std::unordered_set<Uint8> _mouseButtons;
 
     inline static float _mouseX = 0.0f;
     inline static float _mouseY = 0.0f;
@@ -65,23 +65,26 @@ public:
             _mouseV += event.motion.yrel;
             break;
         case SDL_EVENT_MOUSE_BUTTON_DOWN:
-            _mouseButtons.insert(event.button.button);
+            //_mouseButtons.insert(event.button.button);
 
             switch (event.button.button)
             {
             case SDL_BUTTON_LEFT:
+                Left = true;
                 for (std::function<void()> &func : _mouseDownFunctionsL)
                 {
                     func();
                 }
                 break;
             case SDL_BUTTON_RIGHT:
+                Right = true;
                 for (std::function<void()> &func : _mouseDownFunctionsR)
                 {
                     func();
                 }
                 break;
             case SDL_BUTTON_MIDDLE:
+                Middle = true;
                 for (std::function<void()> &func : _mouseDownFunctionsM)
                 {
                     func();
@@ -94,23 +97,26 @@ public:
 
             break;
         case SDL_EVENT_MOUSE_BUTTON_UP:
-            _mouseButtons.erase(event.button.button);
+            //_mouseButtons.erase(event.button.button);
 
             switch (event.button.button)
             {
             case SDL_BUTTON_LEFT:
+                Left = false;
                 for (std::function<void()> &func : _mouseUpFunctionsL)
                 {
                     func();
                 }
                 break;
             case SDL_BUTTON_RIGHT:
+                Right = false;
                 for (std::function<void()> &func : _mouseUpFunctionsR)
                 {
                     func();
                 }
                 break;
             case SDL_BUTTON_MIDDLE:
+                Middle = false;
                 for (std::function<void()> &func : _mouseUpFunctionsM)
                 {
                     func();
@@ -158,11 +164,14 @@ public:
         _mouseUpFunctionsM.push_back(function);
     }
 
-    // raw mouse state (for getting inputs from random buttons besides R L or M)
-    static bool GetMouseState(Uint8 button)
-    {
-        return _mouseButtons.count(button) != 0;
-    }
+    //// raw mouse state (for getting inputs from random buttons besides R L or M)
+    //static bool GetMouseState(Uint8 button)
+    //{
+    //    return _mouseButtons.count(button) != 0;
+    //}
+    inline static bool Left = false;
+    inline static bool Right = false;
+    inline static bool Middle = false;
 
     // keyboard stuf
     static bool keyDown(SDL_Scancode sc)

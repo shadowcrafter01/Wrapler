@@ -24,7 +24,7 @@ struct CAM
 struct TEX
 { // each texture has to be attached to a specific window
     inline static ENG_Texture billGates = ENG::CreateTexture(&WIN::primary, "data/textures/billGates.bmp");
-    //inline static ENG_Texture test = ENG::CreateTexture(&WIN::test, "data/textures/billGates.bmp");
+    inline static ENG_Texture test = ENG::CreateTexture(&WIN::primary, "data/textures/test.bmp");
 };
 
 struct AUD
