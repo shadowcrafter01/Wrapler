@@ -8,47 +8,79 @@ class ENG_Atlas
 private:
     /* data */
 public:
-    ENG_Atlas(ENG_Window *window, const char *path, Vector2<int> image_size) : path{path},
-                                                                               renderer{window->renderer.pointer}
+    ENG_Atlas(ENG_Window *window, const char *path, Vector2<int> image_size = NULL)
     {
-        ENG_Console::LogLoadStart((std::string) "Loading atlas [" + path + "]");
+        texture = &ENG_Texture(window, path);
 
-        surface = IMG_Load(path);
-        if (surface == NULL)
+        ENG_Console::LogLoadStart((std::string) "Making Atlas: [" + path + "]");
+        if (image_size == NULL)
         {
-            ENG_Console::LogLoadEnd(false);
+            state = false;
+            ENG_Console::LogLoadEnd(true);
             return;
         }
-        size = Vector2<int>(surface->w, surface->h);
-        pointer = SDL_CreateTextureFromSurface(window->renderer, surface);
-        if (pointer == NULL)
+        if (texture->size.x % imageSize.x != 0 || texture->size.y % imageSize.y != 0)
         {
-            ENG_Console::LogLoadEnd(false);
+            state = false;
+            ENG_Console::LogLoadEnd(true, "Warning: Bad size parameter");
             return;
         }
+        state = true;
         ENG_Console::LogLoadEnd(true);
-        state = true;
     }
-    ENG_Atlas(ENG_Texture *texture, Vector2<int> image_size) : imageSize{image_size}
+    ENG_Atlas(ENG_Texture *texture, Vector2<int> image_size = NULL) : imageSize{image_size},
+                                                                      texture{texture}
     {
-        path = texture->path;
-        surface = texture->surface;
-        size = texture->size;
-        pointer = texture->pointer;
-        renderer = texture->renderer;
-
+        ENG_Console::LogLoadStart((std::string) "Making Atlas: [" + texture->path + "]");
+        if (image_size == NULL)
+        {
+            state = false;
+            ENG_Console::LogLoadEnd(true);
+            return;
+        }
+        if (texture->size.x % imageSize.x != 0 || texture->size.y % imageSize.y != 0)
+        {
+            state = false;
+            ENG_Console::LogLoadEnd(true, "Warning: Bad size parameter");
+            return;
+        }
         state = true;
+        ENG_Console::LogLoadEnd(true);
     }
 
-    
+    void CropTo(Vector2<int> new_pos, Vector2<int> new_size)
+    {
+        pos = new_pos;
+        size = new_size;
+    }
 
-    Vector2<double> imageSize;
-    SDL_Renderer *renderer;
-    const char *path;
-    SDL_Texture *pointer;
-    SDL_Surface *surface;
+//    void AutoCrop(int frame)
+//    {
+//        if (!state)
+//        {
+//            if (imageSize == NULL)
+//            {
+//                return;
+//            }
+//            if (texture->size.x % imageSize.x != 0 || texture->size.y % imageSize.y != 0)
+//            {
+//                return;
+//            }
+//            else
+//            {
+//                state = true;
+//            }
+//        }
+//
+//        size = imageSize;
+//        pos = Vector2<int>(imageSize.x*frame,imageSize.);
+//    }
+
+    ENG_Texture *texture;
+    Vector2<int> imageSize;
     bool state = false;
     Vector2<int> size;
+    Vector2<int> pos;
 };
 
 #endif
