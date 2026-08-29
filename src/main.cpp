@@ -53,6 +53,7 @@ int main(int argc, char *argv[])
     test.damping = 0.5;
     test.fenceToWindow = true;
     test.AssignClickEvent_L(&onMouseDownL);
+    test.position = {100,0};
 
     ENG_CollisionShape tempShape;
     tempShape.radius = 20;

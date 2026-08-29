@@ -140,10 +140,10 @@ public:
             position.y = SDL_clamp(position.y, camera->window->size.y / -2, camera->window->size.y / 2);
         }
 
-        if (camera != nullptr && collisionShape != nullptr && collisionShape->IfOverlapping(ENG_Input::GetMouseWorldPos(camera)))
+        if (camera != nullptr && collisionShape != nullptr && collisionShape->IfOverlapping(ENG_Input::GetMouseWorldPos(camera) - position))
         {
             // hover event
-            _mouseHoverRunner.OnTrue(collisionShape->IfOverlapping(ENG_Input::GetMouseWorldPos(camera)));
+            _mouseHoverRunner.OnTrue(collisionShape->IfOverlapping(ENG_Input::GetMouseWorldPos(camera) - position));
             // click
             _mouseDownRunner_R.OnTrue(ENG_Input::Right);
             _mouseDownRunner_L.OnTrue(ENG_Input::Left);

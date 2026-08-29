@@ -10,7 +10,6 @@ private:
 public:
     ENG_CollisionShape()
     {
-
     }
 
     bool isCircular = true;
@@ -28,43 +27,44 @@ public:
     {
         if (shape1->isCircular && shape2->isCircular)
         {
-            if (Vector2<double>::Distance(shape1->centroid,shape2->centroid) <= shape1->radius + shape2->radius);
+            if (Vector2<double>::Distance(shape1->centroid, shape2->centroid) <= shape1->radius + shape2->radius)
+                ;
             {
                 return true;
             }
         }
         else
         {
-            
         }
+        return false;
     }
     inline static bool IfOverlapping(ENG_CollisionShape *shape, Vector2<double> point)
     {
         if (shape->isCircular)
         {
-            if (Vector2<double>::Distance(shape->centroid,point) <= shape->radius);
+            if (Vector2<double>::Distance(shape->centroid, point) <= shape->radius)
+                ;
             {
                 return true;
             }
         }
         else
         {
-
         }
+        return false;
     }
     bool IfOverlapping(Vector2<double> point)
     {
         if (isCircular)
         {
-            double distance = Vector2<double>::Distance(centroid,point);
-            if (distance <= radius);
+            double distance = Vector2<double>::Distance(centroid, point);
+            if (distance <= radius)
             {
                 return true;
             }
         }
         else
         {
-            return false;
         }
         return false;
     }
@@ -72,20 +72,17 @@ public:
     {
         if (isCircular)
         {
-            if (Vector2<double>::Distance(centroid,shape->centroid) <= radius + shape->radius);
+            if (Vector2<double>::Distance(centroid, shape->centroid) <= radius + shape->radius)
+                ;
             {
                 return true;
             }
         }
         else
         {
-            return false;
         }
         return false;
     }
-
 };
-
-
 
 #endif
