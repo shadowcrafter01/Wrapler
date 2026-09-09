@@ -19,7 +19,7 @@ public:
 
     Vector2<T> Norm(bool return_only = true)
     {
-        T abs = sqrt((x * x) + (y * y));
+        T abs = this->Magnitude();
         Vector2<T> out = {x / abs, y / abs};
         if (!return_only)
         {
@@ -27,6 +27,10 @@ public:
             y = out.y;
         }
         return out;
+    }
+    T Magnitude(bool return_only = true)
+    {
+        return sqrt((x * x) + (y * y));
     }
     Vector2<T> Rotate(double angle, bool return_only = false)
     {
@@ -60,6 +64,11 @@ public:
     inline static T Angle(Vector2<T> vec1, Vector2<T> vec2)
     {
         return atan2(vec2.y - vec1.y, vec2.x - vec1.x);
+    }
+    inline static T Normalized(Vector2<T> vec)
+    {
+        T abs = vec.Magnitude();
+        return Vector2(vec.x / abs, vec.y / abs);
     }
 
     template <class U>
