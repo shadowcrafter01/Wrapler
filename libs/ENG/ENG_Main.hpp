@@ -13,6 +13,7 @@
 #include "ENG_Console.hpp"
 #include "ENG_Window.hpp"
 #include "ENG_Texture.hpp"
+#include "ENG_Atlas.hpp"
 #include "ENG_Font.hpp"
 #include "ENG_Timer.hpp"
 #include "ENG_Audio.hpp"

@@ -17,6 +17,9 @@ private:
     };
 
 public:
+    ENG_Texture()
+    {
+    }
     ENG_Texture(ENG_Window *window, const char *path) : path{path},
                                                         renderer{window->renderer.pointer}
     {

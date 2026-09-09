@@ -9,15 +9,13 @@ class ENG_AnimatedTexture
 private:
 
 public:
-    ENG_AnimatedTexture(ENG_Atlas *atlas)
-    {
-
-    }
-    ENG_AnimatedTexture(std::vector<std::shared_ptr<ENG_Texture>> textures)
+    ENG_AnimatedTexture(ENG_Atlas *atlas, SDL_FRect frame, double framerate)
     {
 
     }
 
+    double FPS;
+    
 
 };
 

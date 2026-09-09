@@ -6,6 +6,7 @@
 
 #include "ENG_Camera.hpp"
 #include "ENG_Texture.hpp"
+#include "ENG_Atlas.hpp"
 #include "ENG_Font.hpp"
 
 #include "Vector2.hpp"
@@ -63,26 +64,24 @@ public:
             // SDL_DestroyTexture(texture->pointer);
         }
     }
-    inline static void DrawAtlas(ENG_Camera *camera, ENG_Texture *texture, Vector2<double> position, int frame, double size = 1, double angle = 0, colorRGBA color = colorRGBA(255, 255, 255, 255))
+    inline static void DrawAtlas(ENG_Camera *camera, ENG_Atlas *atlas, Vector2<double> position, double size = 1, double angle = 0, colorRGBA color = colorRGBA(255, 255, 255, 255))
     {
 
         Vector2<double> pos = projectToCamera(camera, position);
         SDL_FRect r;
-        r.h = size * camera->zoom * texture->size.y;
-        r.w = size * camera->zoom * texture->size.x;
+        r.h = size * camera->zoom * atlas->texture.size.y;
+        r.w = size * camera->zoom * atlas->texture.size.x;
         r.x = pos.x - (r.w / 2);
         r.y = pos.y - (r.h / 2);
         Vector2<double> vr(r.x, r.y);
 
         if (onscreen(camera, &vr, sqrt((r.w / 2 * r.w / 2) + (r.h / 2 * r.h / 2))))
         {
-            // texture->pointer = SDL_CreateTextureFromSurface(camera->window->renderer, texture->surface);
-            SDL_SetTextureBlendMode(texture->pointer, SDL_BLENDMODE_BLEND);
-            SDL_SetTextureColorMod(texture->pointer, color.red, color.green, color.blue);
-            SDL_SetTextureAlphaMod(texture->pointer, color.alpha);
-            SDL_RenderTextureRotated(texture->renderer, texture->pointer, NULL, &r, angle + camera->angle, NULL, SDL_FLIP_NONE);
+            SDL_SetTextureBlendMode(atlas->texture.pointer, SDL_BLENDMODE_BLEND);
+            SDL_SetTextureColorMod(atlas->texture.pointer, color.red, color.green, color.blue);
+            SDL_SetTextureAlphaMod(atlas->texture.pointer, color.alpha);
+            SDL_RenderTextureRotated(atlas->texture.renderer, atlas->texture.pointer, &atlas->rect, &r, angle + camera->angle, NULL, SDL_FLIP_NONE);
             textureDrawCount++;
-            // SDL_DestroyTexture(texture->pointer);
         }
     }
 
@@ -153,8 +152,6 @@ public:
 
         SDL_RenderGeometry(camera->window->renderer, NULL, vertices, 3, NULL, 0);
     }
-
-
 };
 
 #endif

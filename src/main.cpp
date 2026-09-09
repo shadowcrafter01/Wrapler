@@ -64,12 +64,21 @@ int main(int argc, char *argv[])
 
     ENG_Pen testPen = ENG_Pen(&CAM::primary);
 
+    ENG_Atlas atlas(&WIN::primary,"data/textures/billGates.bmp");
+    atlas.rect.x = 0;
+    atlas.rect.y = 0;
+    atlas.rect.w = 10;
+    atlas.rect.h = 10;
 
     while (ENG::Update())
     {
         averageFPS = ENG_Math::Lerp(averageFPS, ENG::timer.FPS, 0.1);
         mainTick();
         controls();
+
+        ENG::draw.DrawAtlas(&CAM::primary, &atlas, {0,0});
+        atlas.rect.x = 10 * cos(ENG::timer.now_s() * 15);
+        atlas.rect.y = 10 * sin(ENG::timer.now_s() * 15);
 
 
         //test.ApplyForce((ENG::input.GetMouseWorldPos(&CAM::primary, true) - test.position).Scale(1, true));
