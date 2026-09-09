@@ -57,6 +57,10 @@ public:
         T yDiff = vec1.y - vec2.y;
         return sqrt((xDiff * xDiff) + (yDiff * yDiff));
     }
+    inline static T Angle(Vector2<T> vec1, Vector2<T> vec2)
+    {
+        return atan2(vec2.y - vec1.y, vec2.x - vec1.x);
+    }
 
     template <class U>
     Vector2<T> operator+(const Vector2<U> &r)
