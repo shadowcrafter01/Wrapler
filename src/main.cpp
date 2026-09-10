@@ -67,8 +67,8 @@ int main(int argc, char *argv[])
     ENG_Atlas atlas(&WIN::primary,"data/textures/billGates.bmp");
     atlas.rect.x = 0;
     atlas.rect.y = 0;
-    atlas.rect.w = 10;
-    atlas.rect.h = 10;
+    atlas.rect.w = 64;
+    atlas.rect.h = 64;
 
     while (ENG::Update())
     {
@@ -77,8 +77,8 @@ int main(int argc, char *argv[])
         controls();
 
         ENG::draw.DrawAtlas(&CAM::primary, &atlas, {0,0});
-        atlas.rect.x = 10 * cos(ENG::timer.now_s() * 15);
-        atlas.rect.y = 10 * sin(ENG::timer.now_s() * 15);
+        atlas.rect.x = ENG::input.GetMouseWorldPos(&CAM::primary).x/10;//10 * cos(ENG::timer.now_s() * 15);
+        atlas.rect.y = ENG::input.GetMouseWorldPos(&CAM::primary).y/10;//10 * sin(ENG::timer.now_s() * 15);
 
 
         //test.ApplyForce((ENG::input.GetMouseWorldPos(&CAM::primary, true) - test.position).Scale(1, true));

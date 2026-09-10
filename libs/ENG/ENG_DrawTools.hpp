@@ -77,10 +77,16 @@ public:
 
         if (onscreen(camera, &vr, sqrt((r.w / 2 * r.w / 2) + (r.h / 2 * r.h / 2))))
         {
+            SDL_FRect s;
+            s.h = atlas->rect.h;
+            s.w = atlas->rect.w;
+            s.x = atlas->rect.x + (atlas->texture.size.x / 2) - (s.w / 2);
+            s.y = -atlas->rect.y + (atlas->texture.size.y / 2) - (s.h / 2);
+
             SDL_SetTextureBlendMode(atlas->texture.pointer, SDL_BLENDMODE_BLEND);
             SDL_SetTextureColorMod(atlas->texture.pointer, color.red, color.green, color.blue);
             SDL_SetTextureAlphaMod(atlas->texture.pointer, color.alpha);
-            SDL_RenderTextureRotated(atlas->texture.renderer, atlas->texture.pointer, &atlas->rect, &r, angle + camera->angle, NULL, SDL_FLIP_NONE);
+            SDL_RenderTextureRotated(atlas->texture.renderer, atlas->texture.pointer, &s, &r, angle + camera->angle, NULL, SDL_FLIP_NONE);
             textureDrawCount++;
         }
     }
