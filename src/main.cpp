@@ -81,6 +81,10 @@ int main(int argc, char *argv[])
 
     StopwatchAsync second(onSecond, 20);
 
+    b2WorldDef worldDef = b2DefaultWorldDef();
+    worldDef.gravity = (b2Vec2){0.0f, -10.0f};
+    b2WorldId worldId = b2CreateWorld(&worldDef);
+
     while (ENG::Update())
     {
         averageFPS = ENG_Math::Lerp(averageFPS, ENG::timer.FPS, 0.1);
