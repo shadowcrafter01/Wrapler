@@ -7,6 +7,7 @@
 #include "ENG_Camera.hpp"
 #include "ENG_Texture.hpp"
 #include "ENG_Atlas.hpp"
+#include "ENG_AnimatedTexture.hpp"
 #include "ENG_Font.hpp"
 
 #include "Vector2.hpp"
@@ -87,6 +88,33 @@ public:
             SDL_SetTextureColorMod(atlas->texture.pointer, color.red, color.green, color.blue);
             SDL_SetTextureAlphaMod(atlas->texture.pointer, color.alpha);
             SDL_RenderTextureRotated(atlas->texture.renderer, atlas->texture.pointer, &s, &r, angle + camera->angle, NULL, SDL_FLIP_NONE);
+            textureDrawCount++;
+        }
+    }
+    inline static void DrawAnimatedTexture(ENG_Camera *camera, ENG_AnimatedTexture *animatedTexture, Vector2<double> position, int frame, double size = 1, double angle = 0, colorRGBA color = colorRGBA(255, 255, 255, 255))
+    {
+        frame = frame % animatedTexture -> frameCount;
+
+        Vector2<double> pos = projectToCamera(camera, position);
+        SDL_FRect r;
+        r.w = size * camera->zoom * animatedTexture->frameSize.x;
+        r.h = size * camera->zoom * animatedTexture->frameSize.y;
+        r.x = pos.x - (r.w / 2);
+        r.y = pos.y - (r.h / 2);
+        Vector2<double> vr(r.x, r.y);
+
+        if (onscreen(camera, &vr, sqrt((r.w / 2 * r.w / 2) + (r.h / 2 * r.h / 2))))
+        {
+            SDL_FRect s;
+            s.w = animatedTexture->frameSize.x;
+            s.h = animatedTexture->frameSize.y;
+            s.x = animatedTexture->frameSize.x * frame;
+            s.y = 0;
+
+            SDL_SetTextureBlendMode(animatedTexture->atlas->texture.pointer, SDL_BLENDMODE_BLEND);
+            SDL_SetTextureColorMod(animatedTexture->atlas->texture.pointer, color.red, color.green, color.blue);
+            SDL_SetTextureAlphaMod(animatedTexture->atlas->texture.pointer, color.alpha);
+            SDL_RenderTextureRotated(animatedTexture->atlas->texture.renderer, animatedTexture->atlas->texture.pointer, &s, &r, angle + camera->angle, NULL, SDL_FLIP_NONE);
             textureDrawCount++;
         }
     }

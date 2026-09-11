@@ -48,6 +48,7 @@ public:
         {
             ENG_Console::LogLoadEnd(false);
         }
+        SDL_SetDefaultTextureScaleMode(renderer, SDL_SCALEMODE_PIXELART);
         instances().push_back(this);
         ENG_Console::LogLoadEnd(true);
     }

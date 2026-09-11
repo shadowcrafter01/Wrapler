@@ -12,6 +12,8 @@ std::uniform_int_distribution<std::mt19937::result_type> dist(0, 100);
 
 GameObject test;
 
+int frame = 0;
+
 void onMouseUpR()
 {
     // AUD::boom.Play();
@@ -22,7 +24,10 @@ void onMouseDownL()
     GetProcessMemoryInfo(GetCurrentProcess(), &pmc, sizeof(pmc));
     ENG::console.LogDebug(pmc.WorkingSetSize / 1024);
 }
-
+void onSecond()
+{
+    frame++;
+}
 
 int main(int argc, char *argv[])
 {
@@ -33,8 +38,8 @@ int main(int argc, char *argv[])
     ENG::console.LogInfo("test");
     ENG::console.LogDebug(ENG::timer.now_ns());
 
-    //ENG::input.RegisterMouseUp_R(onMouseUpR);
-    //ENG::input.RegisterMouseDown_L(onMouseDownL);
+    // ENG::input.RegisterMouseUp_R(onMouseUpR);
+    // ENG::input.RegisterMouseDown_L(onMouseDownL);
 
     float test_number;
     bool test_bool;
@@ -53,22 +58,28 @@ int main(int argc, char *argv[])
     test.damping = 0.5;
     test.fenceToWindow = true;
     test.AssignClickEvent_L(&onMouseDownL);
-    test.position = {100,0};
+    test.position = {100, 0};
 
     ENG_CollisionShape tempShape;
     tempShape.radius = 20;
     test.AssignCollisionShape(&tempShape);
 
-    //ENG_CollisionShape temp;
-    //test.collisionShape = &temp;
+    // ENG_CollisionShape temp;
+    // test.collisionShape = &temp;
 
     ENG_Pen testPen = ENG_Pen(&CAM::primary);
 
-    ENG_Atlas atlas(&WIN::primary,"data/textures/billGates.bmp");
+    ENG_Atlas atlas(&WIN::primary, "data/textures/billGates.bmp");
     atlas.rect.x = 0;
     atlas.rect.y = 0;
     atlas.rect.w = 64;
     atlas.rect.h = 64;
+
+    ENG_Atlas fire(&WIN::primary, "data/textures/fire.png");
+
+    ENG_AnimatedTexture testAnim(&fire, {8, 8}, 1);
+
+    StopwatchAsync second(onSecond, 20);
 
     while (ENG::Update())
     {
@@ -76,12 +87,13 @@ int main(int argc, char *argv[])
         mainTick();
         controls();
 
-        ENG::draw.DrawAtlas(&CAM::primary, &atlas, {0,0});
-        atlas.rect.x = ENG::input.GetMouseWorldPos(&CAM::primary).x/10;//10 * cos(ENG::timer.now_s() * 15);
-        atlas.rect.y = ENG::input.GetMouseWorldPos(&CAM::primary).y/10;//10 * sin(ENG::timer.now_s() * 15);
+        // ENG::draw.DrawAtlas(&CAM::primary, &atlas, {0, 0});
+        // atlas.rect.x = ENG::input.GetMouseWorldPos(&CAM::primary).x / 10; // 10 * cos(ENG::timer.now_s() * 15);
+        // atlas.rect.y = ENG::input.GetMouseWorldPos(&CAM::primary).y / 10; // 10 * sin(ENG::timer.now_s() * 15);
 
+        ENG::draw.DrawAnimatedTexture(&CAM::primary, &testAnim, {0, 0}, frame, 10);
 
-        //test.ApplyForce((ENG::input.GetMouseWorldPos(&CAM::primary, true) - test.position).Scale(1, true));
+        // test.ApplyForce((ENG::input.GetMouseWorldPos(&CAM::primary, true) - test.position).Scale(1, true));
 
         // ENG::draw.DrawLine(&CAM::primary,{0,0},ENG::input.GetMouseWorldPos(&CAM::primary));
         // ENG::draw.DrawTri(&CAM::primary,{-100,-100},{100,-100},ENG::input.GetMouseWorldPos(&CAM::primary),colorRGBA(128,10,200,255));
@@ -95,7 +107,7 @@ int main(int argc, char *argv[])
 
         if (ENG::input.keyState(SDL_SCANCODE_SPACE))
         {
-            SDL_Delay(100);//(dist(rng));
+            SDL_Delay(100); //(dist(rng));
         }
     }
 
