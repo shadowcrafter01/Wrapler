@@ -91,9 +91,16 @@ public:
             textureDrawCount++;
         }
     }
-    inline static void DrawAnimatedTexture(ENG_Camera *camera, ENG_AnimatedTexture *animatedTexture, Vector2<double> position, int frame, double size = 1, double angle = 0, colorRGBA color = colorRGBA(255, 255, 255, 255))
+    inline static void DrawAnimatedTexture(ENG_Camera *camera, ENG_AnimatedTexture *animatedTexture, Vector2<double> position, int frame = -1, double size = 1, double angle = 0, colorRGBA color = colorRGBA(255, 255, 255, 255))
     {
-        frame = frame % animatedTexture -> frameCount;
+        if (frame == -1)
+        {
+            frame = animatedTexture->currentFrame;
+        }
+        else
+        {
+            frame = frame % animatedTexture->frameCount;
+        }
 
         Vector2<double> pos = projectToCamera(camera, position);
         SDL_FRect r;

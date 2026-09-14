@@ -12,13 +12,13 @@ public:
                                                                                        atlas{atlas}
     {
         frameCount = atlas->texture.size.x / frame_size.x;
-
     }
 
     int frameCount;
     ENG_Atlas *atlas;
     double FPS;
     Vector2<int> frameSize;
+    int currentFrame = 0;
 };
 
 #endif

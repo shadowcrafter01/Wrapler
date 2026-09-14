@@ -96,6 +96,7 @@ int main(int argc, char *argv[])
         // atlas.rect.y = ENG::input.GetMouseWorldPos(&CAM::primary).y / 10; // 10 * sin(ENG::timer.now_s() * 15);
 
         ENG::draw.DrawAnimatedTexture(&CAM::primary, &testAnim, {0, 0}, frame, 10);
+        ENG::draw.DrawAnimatedTexture(&CAM::primary, &testAnim, {0, -100}, (int)((double)frame/4.0), 10);
 
         // test.ApplyForce((ENG::input.GetMouseWorldPos(&CAM::primary, true) - test.position).Scale(1, true));
 
