@@ -165,10 +165,10 @@ public:
     }
 
     //// raw mouse state (for getting inputs from random buttons besides R L or M)
-    //static bool GetMouseState(Uint8 button)
-    //{
-    //    return _mouseButtons.count(button) != 0;
-    //}
+    static bool GetMouseState(Uint8 button)
+    {
+        return SDL_GetMouseState(NULL,NULL) == button;
+    }
     inline static bool Left = false;
     inline static bool Right = false;
     inline static bool Middle = false;

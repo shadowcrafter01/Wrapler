@@ -4,6 +4,7 @@
 #include <math.h>
 #include <string>
 #include <sstream>
+#include <box2d/box2d.h>
 
 template <class T = double>
 class Vector2
@@ -212,6 +213,10 @@ public:
         std::string out = "(" + Xout.str() + "," + Yout.str() + ")";
 
         return out.data();
+    }
+    operator b2Vec2()
+    {
+        return (b2Vec2){x, y};
     }
 };
 

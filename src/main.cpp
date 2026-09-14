@@ -85,18 +85,82 @@ int main(int argc, char *argv[])
     worldDef.gravity = (b2Vec2){0.0f, -10.0f};
     b2WorldId worldId = b2CreateWorld(&worldDef);
 
+    b2BodyDef groundBodyDef = b2DefaultBodyDef();
+    groundBodyDef.position = (b2Vec2){0.0f, -100.0f};
+    b2BodyId groundId = b2CreateBody(worldId, &groundBodyDef);
+    b2Polygon groundBox = b2MakeBox(500.0f, 10.0f);
+    b2ShapeDef groundShapeDef = b2DefaultShapeDef();
+    b2CreatePolygonShape(groundId, &groundShapeDef, &groundBox);
+
+    b2BodyDef bodyDef = b2DefaultBodyDef();
+    bodyDef.type = b2_dynamicBody;
+    bodyDef.position = (b2Vec2){0.0f, 400.0f};
+    b2BodyId bodyId = b2CreateBody(worldId, &bodyDef);
+    b2Polygon dynamicBox = b2MakeBox(10.0f, 10.0f);
+    b2ShapeDef shapeDef = b2DefaultShapeDef();
+    shapeDef.density = 1.0f;
+    shapeDef.material.friction = 0.1f;
+    b2CreatePolygonShape(bodyId, &shapeDef, &dynamicBox);
+
+    const float timeStep = 1.0f / 60.0f;
+    const int subStepCount = 4;
+
     while (ENG::Update())
     {
         averageFPS = ENG_Math::Lerp(averageFPS, ENG::timer.FPS, 0.1);
         mainTick();
         controls();
 
+        b2World_Step(worldId, timeStep, subStepCount);
+        b2Vec2 position = b2Body_GetPosition(bodyId);
+        b2Rot rotation = b2Body_GetRotation(bodyId);
+
+        //ENG::draw.DrawTexture(&CAM::primary, &TEX::billGates, {b2Body_GetTransform(bodyId).p.x, b2Body_GetTransform(bodyId).p.y});
+
+        
+        
+        testPen.Up();
+        b2Vec2 p = b2TransformPoint(b2Body_GetTransform(groundId),groundBox.vertices[0]);
+        b2Vec2 p0 = p;
+        for (int i = 0; i < groundBox.count; i++)
+        {
+            p = b2TransformPoint(b2Body_GetTransform(groundId),groundBox.vertices[i]);
+
+            testPen.GoTo({p.x,p.y});
+            testPen.Down();
+
+        }
+        testPen.GoTo({p0.x,p0.y});
+        testPen.Up();
+
+        testPen.Up();
+        p = b2TransformPoint(b2Body_GetTransform(bodyId),dynamicBox.vertices[0]);
+        p0 = p;
+        for (int i = 0; i < dynamicBox.count; i++)
+        {
+            p = b2TransformPoint(b2Body_GetTransform(bodyId),dynamicBox.vertices[i]);
+
+            testPen.GoTo({p.x,p.y});
+            testPen.Down();
+
+        }
+        testPen.GoTo({p0.x,p0.y});
+        testPen.Up();
+
+
+
+
+        if (ENG::input.GetMouseState(SDL_BUTTON_LEFT))
+        {
+            b2Body_ApplyForce(bodyId, (ENG::input.GetMouseWorldPos(&CAM::primary) - Vector2<double>(b2Body_GetTransform(bodyId).p.x, b2Body_GetTransform(bodyId).p.y)).Scale(10, true), b2Body_GetTransform(bodyId).p, true);
+        }
+
         // ENG::draw.DrawAtlas(&CAM::primary, &atlas, {0, 0});
         // atlas.rect.x = ENG::input.GetMouseWorldPos(&CAM::primary).x / 10; // 10 * cos(ENG::timer.now_s() * 15);
         // atlas.rect.y = ENG::input.GetMouseWorldPos(&CAM::primary).y / 10; // 10 * sin(ENG::timer.now_s() * 15);
 
-        ENG::draw.DrawAnimatedTexture(&CAM::primary, &testAnim, {0, 0}, frame, 10);
-        ENG::draw.DrawAnimatedTexture(&CAM::primary, &testAnim, {0, -100}, (int)((double)frame/4.0), 10);
+        // ENG::draw.DrawAnimatedTexture(&CAM::primary, &testAnim, {0, 0}, frame, 10);
+        // ENG::draw.DrawAnimatedTexture(&CAM::primary, &testAnim, {0, -100}, (int)((double)frame / 4.0), 10);
 
         // test.ApplyForce((ENG::input.GetMouseWorldPos(&CAM::primary, true) - test.position).Scale(1, true));
 
@@ -122,6 +186,8 @@ int main(int argc, char *argv[])
     {
         JSON::test.writeProperty<double>("average_fps_best", averageFPS);
     }
+
+    b2DestroyWorld(worldId);
 
     ENG::Shutdown();
     return 0;
