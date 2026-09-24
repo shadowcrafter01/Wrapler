@@ -102,6 +102,20 @@ int main(int argc, char *argv[])
     shapeDef.material.friction = 0.1f;
     b2CreatePolygonShape(bodyId, &shapeDef, &dynamicBox);
 
+    b2BodyDef circleDef = b2DefaultBodyDef();
+    circleDef.type = b2_dynamicBody;
+    circleDef.position = (b2Vec2){0.0f, 500.0f};
+    b2BodyId circleId = b2CreateBody(worldId, &circleDef);
+
+    b2Circle circle;
+    circle.radius = 10.0f;
+
+    b2ShapeDef circleShape = b2DefaultShapeDef();
+    circleShape.density = 1.0f;
+    circleShape.material.friction = 0.1f;
+
+    b2CreateCircleShape(circleId, &circleShape, &circle);
+
     const float timeStep = 1.0f / 60.0f;
     const int subStepCount = 4;
 
@@ -115,44 +129,45 @@ int main(int argc, char *argv[])
         b2Vec2 position = b2Body_GetPosition(bodyId);
         b2Rot rotation = b2Body_GetRotation(bodyId);
 
-        //ENG::draw.DrawTexture(&CAM::primary, &TEX::billGates, {b2Body_GetTransform(bodyId).p.x, b2Body_GetTransform(bodyId).p.y});
+        // ENG::draw.DrawTexture(&CAM::primary, &TEX::billGates, {b2Body_GetTransform(bodyId).p.x, b2Body_GetTransform(bodyId).p.y});
 
-        
-        
         testPen.Up();
-        b2Vec2 p = b2TransformPoint(b2Body_GetTransform(groundId),groundBox.vertices[0]);
+        b2Vec2 p = b2TransformPoint(b2Body_GetTransform(groundId), groundBox.vertices[0]);
         b2Vec2 p0 = p;
         for (int i = 0; i < groundBox.count; i++)
         {
-            p = b2TransformPoint(b2Body_GetTransform(groundId),groundBox.vertices[i]);
+            p = b2TransformPoint(b2Body_GetTransform(groundId), groundBox.vertices[i]);
 
-            testPen.GoTo({p.x,p.y});
+            testPen.GoTo({p.x, p.y});
             testPen.Down();
-
         }
-        testPen.GoTo({p0.x,p0.y});
-        testPen.Up();
+        testPen.GoTo({p0.x, p0.y});
 
         testPen.Up();
-        p = b2TransformPoint(b2Body_GetTransform(bodyId),dynamicBox.vertices[0]);
+        p = b2TransformPoint(b2Body_GetTransform(bodyId), dynamicBox.vertices[0]);
         p0 = p;
         for (int i = 0; i < dynamicBox.count; i++)
         {
-            p = b2TransformPoint(b2Body_GetTransform(bodyId),dynamicBox.vertices[i]);
+            p = b2TransformPoint(b2Body_GetTransform(bodyId), dynamicBox.vertices[i]);
 
-            testPen.GoTo({p.x,p.y});
+            testPen.GoTo({p.x, p.y});
             testPen.Down();
-
         }
-        testPen.GoTo({p0.x,p0.y});
+        testPen.GoTo({p0.x, p0.y});
+
         testPen.Up();
-
-
-
+        p = b2TransformPoint(b2Body_GetTransform(circleId), {0, 0});
+        testPen.GoTo({p.x + circle.radius, p.y});
+        testPen.Down();
+        for (int i = 0; i <= 2 * 31.4; i++)
+        {
+            testPen.GoTo({p.x + (circle.radius * std::cos(i / 10.0)), p.y + (circle.radius * std::sin(i / 10.0))});
+        }
+        testPen.Up();
 
         if (ENG::input.GetMouseState(SDL_BUTTON_LEFT))
         {
-            b2Body_ApplyForce(bodyId, (ENG::input.GetMouseWorldPos(&CAM::primary) - Vector2<double>(b2Body_GetTransform(bodyId).p.x, b2Body_GetTransform(bodyId).p.y)).Scale(10, true), b2Body_GetTransform(bodyId).p, true);
+            b2Body_ApplyForce(bodyId, (ENG::input.GetMouseWorldPos(&CAM::primary) - Vector2<double>(b2Body_GetTransform(bodyId).p.x, b2Body_GetTransform(bodyId).p.y)).Scale(100, true), b2Body_GetTransform(bodyId).p, true);
         }
 
         // ENG::draw.DrawAtlas(&CAM::primary, &atlas, {0, 0});
@@ -178,6 +193,7 @@ int main(int argc, char *argv[])
         {
             SDL_Delay(100); //(dist(rng));
         }
+        SDL_Delay(1);
     }
 
     JSON::test.writeProperty<double>("average_fps", averageFPS);
