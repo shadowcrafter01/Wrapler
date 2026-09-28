@@ -60,9 +60,6 @@ int main(int argc, char *argv[])
     test.AssignClickEvent_L(&onMouseDownL);
     test.position = {100, 0};
 
-    ENG_CollisionShape tempShape;
-    tempShape.radius = 20;
-    test.AssignCollisionShape(&tempShape);
 
     // ENG_CollisionShape temp;
     // test.collisionShape = &temp;
@@ -106,14 +103,11 @@ int main(int argc, char *argv[])
     circleDef.type = b2_dynamicBody;
     circleDef.position = (b2Vec2){0.0f, 500.0f};
     b2BodyId circleId = b2CreateBody(worldId, &circleDef);
-
     b2Circle circle;
     circle.radius = 10.0f;
-
     b2ShapeDef circleShape = b2DefaultShapeDef();
     circleShape.density = 1.0f;
     circleShape.material.friction = 0.1f;
-
     b2CreateCircleShape(circleId, &circleShape, &circle);
 
     const float timeStep = 1.0f / 60.0f;
