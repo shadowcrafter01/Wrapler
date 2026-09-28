@@ -1,5 +1,5 @@
 # Wrapler
-Basic SDL3 Engine/Wrapper for Making Gaymes
+a first attempt at setting up ENG2D, phasing it out now for a simple CMake content declare
 
 # Build Instructions
 
